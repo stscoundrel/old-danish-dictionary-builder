@@ -1,15 +1,12 @@
-# Kotlin template
+# Old Danish Dictionary Builder
 
-Template for Kotlin/Maven library with CI/CD & Dependabot updates.
+Build machine-readable version of Otto Kalkar's "Dictionary of the Old Danish Language".
 
-## Install
+Currently work-in-progress, but the goal is to offer JSON dataset with normalized dictionary data. It might very well end up being a slow process which requires a lot of manual labor, but we'll see how far we can get with code alone.
 
-As Maven dependency.
+## Current features:
+- Downloads all scanned pages.
 
-```xml
-<dependency>
-  <groupId>io.github.stscoundrel</groupId>
-  <artifactId>kotlin-template</artifactId>
-  <version>0.1.0</version> <!-- Note! Check latest release number -->
-</dependency>
-```
+## Upcoming features
+- Feeds images to image-to-text (OCR) library.
+- Parse ORC results to machine-readable structured formats.
