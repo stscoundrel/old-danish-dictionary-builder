@@ -1,0 +1,21 @@
+version: 2
+updates:
+  - package-ecosystem: "maven"
+    directory: "/"
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 25
+    groups:
+       maven-dependencies:
+          patterns:
+            - "*" # Match all dependencies to one PR.
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 25
+    groups:
+       ci-dependencies:
+          patterns:
+            - "*" # Match all dependencies to one PR.
