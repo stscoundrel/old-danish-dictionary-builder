@@ -1,0 +1,27 @@
+{
+  "name": "image-to-text",
+  "version": "0.1.0",
+  "description": "Old Danish Dictionary Builder - image-to-text portion",
+  "repository": "https://github.com/stscoundrel/old-danish-dictionary-builder.git",
+  "author": "stscoundrel <silvennoinen.sampo@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "skilja": "^0.9.0",
+    "tesseract.js": "^5.0.3",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.10",
+    "prettier": "^3.0.3"
+  },
+  "scripts": {
+    "images-to-text": "ts-node src/app.ts",
+    "lint": "prettier src --check",
+    "fix": "prettier src --write"
+  }
+}
