@@ -6,7 +6,7 @@ Currently work-in-progress, but the goal is to offer JSON dataset with normalize
 
 ## Current features:
 - Downloads all scanned pages.
+- Feeds images to image-to-text (OCR) library.
 
 ## Upcoming features
-- Feeds images to image-to-text (OCR) library.
 - Parse ORC results to machine-readable structured formats.

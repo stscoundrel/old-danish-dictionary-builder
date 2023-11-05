@@ -1,0 +1,27 @@
+name: TypeScript - CI
+
+on: [pull_request]
+
+defaults:
+  run:
+    working-directory: image-to-text
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Lint with Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: yarn install --production=false
+    - run: yarn lint
+      env:
+        CI: true

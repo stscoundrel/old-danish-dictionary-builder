@@ -8,7 +8,17 @@ updates:
     groups:
        maven-dependencies:
           patterns:
-            - "*" # Match all dependencies to one PR.
+            - "*"
+
+  - package-ecosystem: npm
+    directory: "/image-to-text"
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 25
+    groups:
+       npm-dependencies:
+          patterns:
+            - "*"
 
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -18,4 +28,4 @@ updates:
     groups:
        ci-dependencies:
           patterns:
-            - "*" # Match all dependencies to one PR.
+            - "*"
