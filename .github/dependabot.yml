@@ -20,6 +20,17 @@ updates:
           patterns:
             - "*"
 
+  - package-ecosystem: pip
+    directory: "/parser"
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 25
+    groups:
+       dependencies:
+          patterns:
+            - "*"
+
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:

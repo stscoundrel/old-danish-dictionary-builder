@@ -1,0 +1,30 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+
+[dev-packages]
+black = "*"
+coverage = "*"
+flake8 = "*"
+mypy = "*"
+pytest = "*"
+isort = "*"
+
+[requires]
+
+[scripts]
+lint = "pipenv run flake8 . --count --max-complexity=10 --max-line-length=127 --statistics"
+black-check = "black . --check"
+black-fix = "black ."
+isort = "isort src tests"
+isort-check = "isort -c src tests"
+type-hints = "mypy src"
+unit-test = "pytest -v"
+test = "pipenv run unit-test"
+test-coverage-create = "pipenv run coverage run -m pytest"
+test-coverage-report = "pipenv run coverage report --fail-under=90"
+fix = "pipenv run isort && pipenv run black-fix"
+parse = "python3 main.py"
