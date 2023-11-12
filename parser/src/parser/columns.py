@@ -1,6 +1,6 @@
 from typing import Final
 
-_divider: Final[str] = " | "
+_divider: Final[str] = "|"
 
 
 def parse_column(page: list[str]) -> list[str]:
@@ -20,7 +20,7 @@ def parse_column(page: list[str]) -> list[str]:
                 print("Unexpected split!")
                 print(line)
 
-    return left_column + right_column
+    return [page[0]] + left_column + right_column
 
 
 def parse_columns(pages: list[list[str]]) -> list[list[str]]:
