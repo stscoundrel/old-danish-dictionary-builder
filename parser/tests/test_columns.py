@@ -1,4 +1,4 @@
-from src.parser import parser
+from src.parser import columns
 
 
 def test_column_combining() -> None:
@@ -10,14 +10,15 @@ def test_column_combining() -> None:
     ]
 
     expected = [
-        "Lorem ipsum",
-        "dolor sit amet",
-        "dolor sit igitur",
-        "Country roads",
-        "take me home",
-        "to the place I belong",
+        "Meta line about the page",
+        "Lorem ipsum ",
+        "dolor sit amet ",
+        "dolor sit igitur ",
+        " Country roads",
+        " take me home",
+        " to the place I belong",
     ]
 
-    result = parser.parse_column(input)
+    result = columns.parse_column(input)
 
     assert result == expected
