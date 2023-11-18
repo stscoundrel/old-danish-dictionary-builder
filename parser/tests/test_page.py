@@ -36,3 +36,28 @@ def test_page_letters_meta() -> None:
     assert page1.get_letters_in_page() == {"A"}
     assert page2.get_letters_in_page() == {"A"}
     assert page3.get_letters_in_page() == {"J", "K"}
+
+
+def test_parses_simple_entries() -> None:
+    """
+    Simple entries: one letter in more-or-less straightforward OCR'd page.
+    """
+    one_letter_left_page_input = _single_column_test_file("simple-page.txt")
+
+    page = Page(one_letter_left_page_input)
+    entries = page.get_entries()
+
+    expected_headwords = [
+        "Aaf",  # Incorrect! TODO: GH-13
+        "Afkomme,",
+        "Afkomst,",
+        "Afkontrafej,",
+        "Afkon-\n\n",  # Incorrect! TODO: GH-15
+        "Afkort,",
+        "Afkorte,",
+        "Afkortelse,",
+        "Afkvædet,",
+        "Afkynde,",
+    ]
+
+    assert [entry.headword for entry in entries] == expected_headwords

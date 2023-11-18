@@ -1,7 +1,7 @@
 from typing import Final
 
 _divider: Final[str] = "|"
-_spaces_divider: Final[str] = "    "
+_spaces_divider: Final[str] = "   "
 
 
 def _get_column_divider(line: str) -> str:
