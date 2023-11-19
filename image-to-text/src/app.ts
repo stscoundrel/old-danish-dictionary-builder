@@ -5,6 +5,9 @@ import { chunkArray } from "skilja";
 const inputPath = "./resources/images";
 const outputPath = "./resources/text";
 
+const WORKERS_COUNT = 6;
+const BATCH_SIZE = WORKERS_COUNT * 2;
+
 const getWorker = async (): Promise<Tesseract.Worker> => {
   const worker = await Tesseract.createWorker("dan");
 
@@ -15,38 +18,65 @@ const getWorker = async (): Promise<Tesseract.Worker> => {
   return worker;
 };
 
+const getScheduler = async (): Promise<Tesseract.Scheduler> => {
+  const scheduler = Tesseract.createScheduler();
+
+  const workers = await Promise.all(
+    [...Array(WORKERS_COUNT)].map(async (_) => await getWorker()),
+  );
+
+  workers.forEach((worker) => scheduler.addWorker(worker));
+
+  return scheduler;
+};
+
 async function processImages() {
   try {
     const allFiles = await fs.promises.readdir(inputPath);
-    const batches = chunkArray(allFiles, 5);
+    const batches: string[][] = chunkArray(allFiles, BATCH_SIZE);
+    const scheduler = await getScheduler();
 
     for (let i = 0; i <= batches.length; i += 1) {
+      // Read images.
       const imageProcessingPromises = batches[i].map(async (file) => {
+        console.time("IMAGES" + file);
         const imagePath = `${inputPath}/${file}`;
-
-        const worker = await getWorker();
 
         // Perform OCR on the current image
         const {
           data: { text },
-        } = await worker.recognize(imagePath);
+        } = await scheduler.addJob("recognize", imagePath);
 
-        // Output the extracted text to a file
-        const outputFilePath = `${outputPath}/${file}.txt`.replace(".gif", "");
-        await fs.writeFileSync(outputFilePath, text);
-        console.log(`Saved ${outputFilePath}`);
+        console.timeEnd("IMAGES" + file);
+
+        return [file, text];
       });
+
+      const imageResults = await Promise.all(imageProcessingPromises);
 
       console.log(
         `Read batch ${i + 1} out of ${
           batches.length
         }. Waiting to create text files...`,
       );
-      await Promise.all(imageProcessingPromises);
+
+      // Store results as text.
+      const fileSavePromises = imageResults.map(async ([fileName, text]) => {
+        const outputFilePath = `${outputPath}/${fileName}.txt`.replace(
+          ".gif",
+          "",
+        );
+        return await fs.writeFile(outputFilePath, text, () => {});
+      });
+
+      await Promise.all(fileSavePromises);
+
       console.log(
         `Batch ${i + 1} out of ${batches.length} processed successfully.`,
       );
     }
+
+    await scheduler.terminate();
   } catch (error) {
     console.error("Error processing images:", error);
   }
