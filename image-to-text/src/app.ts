@@ -5,6 +5,16 @@ import { chunkArray } from "skilja";
 const inputPath = "./resources/images";
 const outputPath = "./resources/text";
 
+const getWorker = async (): Promise<Tesseract.Worker> => {
+  const worker = await Tesseract.createWorker("dan");
+
+  worker.setParameters({
+    preserve_interword_spaces: "1",
+  });
+
+  return worker;
+};
+
 async function processImages() {
   try {
     const allFiles = await fs.promises.readdir(inputPath);
@@ -14,20 +24,12 @@ async function processImages() {
       const imageProcessingPromises = batches[i].map(async (file) => {
         const imagePath = `${inputPath}/${file}`;
 
+        const worker = await getWorker();
+
         // Perform OCR on the current image
         const {
           data: { text },
-        } = await Tesseract.recognize(
-          imagePath,
-          "dan", // Danish language.
-          // Typing wont work for these options.
-          {
-            // @ts-ignore
-            // TODO: does not seem to handle two columns.
-            // Can settings help with this, or should it be parsed separately later?
-            tessedit_pageseg_mode: Tesseract.PSM.AUTO_OSD, // Page segmentation mode
-          },
-        );
+        } = await worker.recognize(imagePath);
 
         // Output the extracted text to a file
         const outputFilePath = `${outputPath}/${file}.txt`.replace(".gif", "");
