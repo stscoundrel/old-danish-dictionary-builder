@@ -6,7 +6,7 @@ const inputPath = "./resources/images";
 const outputPath = "./resources/text";
 
 const WORKERS_COUNT = 6;
-const BATCH_SIZE = WORKERS_COUNT * 2;
+const BATCH_SIZE = 30;
 
 const getWorker = async (): Promise<Tesseract.Worker> => {
   const worker = await Tesseract.createWorker("dan");
@@ -26,7 +26,7 @@ const getScheduler = async (): Promise<Tesseract.Scheduler> => {
   );
 
   workers.forEach((worker) => scheduler.addWorker(worker));
-
+    
   return scheduler;
 };
 
@@ -39,7 +39,6 @@ async function processImages() {
     for (let i = 0; i <= batches.length; i += 1) {
       // Read images.
       const imageProcessingPromises = batches[i].map(async (file) => {
-        console.time("IMAGES" + file);
         const imagePath = `${inputPath}/${file}`;
 
         // Perform OCR on the current image
@@ -47,7 +46,9 @@ async function processImages() {
           data: { text },
         } = await scheduler.addJob("recognize", imagePath);
 
-        console.timeEnd("IMAGES" + file);
+        console.log(
+          `Batch ${i + 1}: ${scheduler.getQueueLen()} images to be processed `,
+        );
 
         return [file, text];
       });
