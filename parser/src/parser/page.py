@@ -7,16 +7,21 @@ class Entry(NamedTuple):
     definitions: str
 
     @staticmethod
-    def from_raw_entry(raw_entry: str) -> "Entry":
+    def _clean_definitions(raw_definitions: str) -> str:
+        # Drop all linebreaks.
+        cleaned_definitions = raw_definitions.replace("\n", "")
+
+        return " ".join(
+            [splitted for splitted in cleaned_definitions.split(" ") if splitted != ""]
+        )
+
+    @classmethod
+    def from_raw_entry(cls, raw_entry: str) -> "Entry":
         # Naive expectation: first word is headword.
         # TODO: GH-16 better detection.
         parts = raw_entry.split(" ", maxsplit=1)
 
-        return Entry(
-            headword=parts[0],
-            # TODO: GH-17 clean up content.
-            definitions=parts[1],
-        )
+        return Entry(headword=parts[0], definitions=cls._clean_definitions(parts[1]))
 
 
 class Page:
