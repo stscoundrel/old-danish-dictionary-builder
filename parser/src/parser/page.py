@@ -57,7 +57,7 @@ class Page:
     def is_right_side_page(self) -> bool:
         return not self.is_left_side_page()
 
-    def get_letters_in_page(self) -> set[str]:
+    def get_letters_in_page(self) -> list[str]:
         """
         Page can generally have 1 or 2 start letters for headwords.
         Most common case: all headwords start with same letter.
@@ -72,7 +72,7 @@ class Page:
             letters.add(self._get_meta_parts()[0][0].upper())
             letters.add(self._get_meta_parts()[1][0].upper())
 
-        return letters
+        return sorted(list(letters))
 
     def get_entries(self) -> list[Entry]:
         raw_entries = ["\n".join(self.content)]

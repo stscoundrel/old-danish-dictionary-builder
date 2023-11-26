@@ -33,9 +33,9 @@ def test_page_letters_meta() -> None:
     page2 = Page(one_letter_right_page_input)
     page3 = Page(two_letters_right_page_input)
 
-    assert page1.get_letters_in_page() == {"A"}
-    assert page2.get_letters_in_page() == {"A"}
-    assert page3.get_letters_in_page() == {"J", "K"}
+    assert page1.get_letters_in_page() == ["A"]
+    assert page2.get_letters_in_page() == ["A"]
+    assert page3.get_letters_in_page() == ["J", "K"]
 
 
 def test_parses_simple_entries() -> None:
