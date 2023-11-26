@@ -10,7 +10,7 @@ def _get_column_divider(line: str) -> str:
         return _divider
 
     # If divider is missing, it was probably misread.
-    # If divider is missing, it generally means there will be a
+    # It generally means there will be a
     # grouping of spaces where the divider should be.
     # Four spaces seems common enough case to act as divider.
     return _spaces_divider
@@ -24,7 +24,6 @@ def _get_divided_lines(line: str) -> list[str]:
     # the whitespace after the split. Therefore, append it to
     # all but the first item in split list.
     if divider == _spaces_divider:
-        print("APPENDING SPACES")
         for idx, divided_part in enumerate(divided[1:]):
             divided[idx + 1] = f"{_spaces_divider}{divided_part}"
 

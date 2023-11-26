@@ -7,7 +7,11 @@ class Page:
 
     def _get_meta_parts(self) -> list[str]:
         if self._meta_parts is None:
-            self._meta_parts = self.meta.split(" ")
+            # Meta row often contains multitude of extra spaces.
+            # Just drop them from actual meta parts when splitting.
+            self._meta_parts = [
+                splitted for splitted in self.meta.split(" ") if splitted != ""
+            ]
 
         return self._meta_parts
 
