@@ -26,7 +26,7 @@ const getScheduler = async (): Promise<Tesseract.Scheduler> => {
   );
 
   workers.forEach((worker) => scheduler.addWorker(worker));
-    
+
   return scheduler;
 };
 
