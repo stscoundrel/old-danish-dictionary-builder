@@ -60,4 +60,18 @@ def test_parses_simple_entries() -> None:
         "Afkynde,",
     ]
 
+    expected_content = (
+        "go. 1) komme (bort) fra; kommer schiff paa grund oc kand ey med mindre affkomme. "
+        "N. D. Mag. VI. 104; som ey bygge oc boo paa wort oc kronens goilz oc ey ere aff- "
+        "komne met wore mynde (1506). Ro- senv., Gl. L. V. 202; po thet Hans Ure motte thets "
+        "bedre affkomme oc guit bliffae trette oc uenighed (1549). Rosenv., Gl. D. I. 71; N. D. Mag. 1. 814. "
+        "— 2) komme af; at ther will afikomme eth stort oprør och forderflue (1526). N. D. Mag. V. 215; der met "
+        "er det affkommen, mand neppe kiender slecten. Hvitf. VIII 365. — 3) aflægges (t. abkommen.); at the ismaa "
+        "markede ere aflagde, oc att ingen haffaer fordelle ther af, at the ere afkommen (1542). D. Mag. IV. 288. — "
+        "4) overkomme; at voris depu- terede samme miinstringer, naar de afkomme kand, self skall bjwaane (1890). "
+        "Geh. Ark. Årsb. IL 294."
+    )
+
     assert [entry.headword for entry in entries] == expected_headwords
+
+    assert entries[1].definitions == expected_content
