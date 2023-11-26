@@ -18,7 +18,7 @@ def _get_column_divider(line: str) -> str:
 
 def _get_divided_lines(line: str) -> list[str]:
     divider = _get_column_divider(line)
-    divided = line.split(divider)
+    divided = line.split(divider, 1)
 
     # If we're dealing with spaces divider, we want to preserve
     # the whitespace after the split. Therefore, append it to
@@ -38,6 +38,9 @@ def parse_column(page: list[str]) -> list[str]:
         divided = _get_divided_lines(line)
 
         match len(divided):
+            case 0:
+                # Empty line
+                continue
             case 1:
                 left_column.append(line)
             case 2:
