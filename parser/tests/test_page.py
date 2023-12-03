@@ -1,5 +1,5 @@
 from src.parser import columns
-from src.parser.page import Page
+from src.parser.page import EntryStatus, Page
 from tests import open_test_file
 
 
@@ -48,7 +48,7 @@ def test_parses_simple_entries() -> None:
     entries = page.get_entries()
 
     expected_headwords = [
-        "Aaf",  # Incorrect! TODO: GH-13
+        "Aaf",  # Partial, part of last page.
         "Afkomme,",
         "Afkomst,",
         "Afkontrafej,",
@@ -58,6 +58,19 @@ def test_parses_simple_entries() -> None:
         "Afkortelse,",
         "Afkvædet,",
         "Afkynde,",
+    ]
+
+    expected_statuses = [
+        EntryStatus.PART_OF_PREVIOUS_ENTRY,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.PART_OF_PREVIOUS_ENTRY,  # Incorrect! TODO: GH-15
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
     ]
 
     expected_content = (
@@ -73,5 +86,6 @@ def test_parses_simple_entries() -> None:
     )
 
     assert [entry.headword for entry in entries] == expected_headwords
+    assert [entry.status for entry in entries] == expected_statuses
 
     assert entries[1].definitions == expected_content
