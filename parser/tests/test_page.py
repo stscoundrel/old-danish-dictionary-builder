@@ -48,11 +48,14 @@ def test_parses_simple_entries() -> None:
     entries = page.get_entries()
 
     expected_headwords = [
-        "Aaf",  # Partial, part of last page.
+        "af",  # Partial, part of last page.
+        "Afklappe,",
+        "Afklare,",
+        "Afkom,",
         "Afkomme,",
         "Afkomst,",
         "Afkontrafej,",
-        "Afkon-\n\n",  # Incorrect! TODO: GH-15
+        "Aalborg,",
         "Afkort,",
         "Afkorte,",
         "Afkortelse,",
@@ -65,7 +68,10 @@ def test_parses_simple_entries() -> None:
         EntryStatus.VALID,
         EntryStatus.VALID,
         EntryStatus.VALID,
-        EntryStatus.PART_OF_PREVIOUS_ENTRY,  # Incorrect! TODO: GH-15
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
         EntryStatus.VALID,
         EntryStatus.VALID,
         EntryStatus.VALID,
@@ -82,10 +88,10 @@ def test_parses_simple_entries() -> None:
         "er det affkommen, mand neppe kiender slecten. Hvitf. VIII 365. — 3) aflægges (t. abkommen.); at the ismaa "
         "markede ere aflagde, oc att ingen haffaer fordelle ther af, at the ere afkommen (1542). D. Mag. IV. 288. — "
         "4) overkomme; at voris depu- terede samme miinstringer, naar de afkomme kand, self skall bjwaane (1890). "
-        "Geh. Ark. Årsb. IL 294."
+        "Geh. Ark. Årsb. IL 294. —"
     )
 
     assert [entry.headword for entry in entries] == expected_headwords
     assert [entry.status for entry in entries] == expected_statuses
 
-    assert entries[1].definitions == expected_content
+    assert entries[4].definitions == expected_content

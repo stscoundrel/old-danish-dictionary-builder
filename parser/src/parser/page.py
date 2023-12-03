@@ -57,7 +57,7 @@ class Page:
         return self._meta_parts
 
     def get_separators_for(self, letter: str) -> list[str]:
-        return [f"— {letter}", f"   {letter}"]
+        return [rf"(\b{letter}\w+\b,)"]  # Capital letter and words ends in comma.
 
     def get_entry_separators(self) -> set[str]:
         return {
@@ -90,6 +90,10 @@ class Page:
         return sorted(list(letters))
 
     def get_entries(self) -> list[Entry]:
+        def _line_is_entry(line: str) -> bool:
+            parts = line.split(" ")
+            return len(parts) == 1 and parts[0][-1] == ","
+
         raw_entries = ["\n".join(self.content)]
 
         for letter in self.get_letters_in_page():
@@ -98,14 +102,18 @@ class Page:
             separators_regex = "|".join(self.get_separators_for(letter))
 
             # Unsplit content should always be in the last entry.
-            entries_for_letter = re.split(separators_regex, raw_entries[-1])
+            line_entries_for_letter = re.split(separators_regex, raw_entries[-1])
 
-            # TODO: GH-13. Only append if not the first entry.
-            # If first entry, detect if start of entry or not.
-            # Probably needs to support incomplete entries to be patched later.
+            entries_for_letter = []
 
-            # Append base letter back
-            entries_for_letter = [f"{letter}{entry}" for entry in entries_for_letter]
+            for idx, line in enumerate(line_entries_for_letter):
+                if idx == 0:
+                    entries_for_letter.append(line)
+
+                if _line_is_entry(line):
+                    entries_for_letter.append(line)
+                else:
+                    entries_for_letter[-1] = f"{entries_for_letter[-1]}{line}"
 
             raw_entries = raw_entries[0:-2] + entries_for_letter
 
