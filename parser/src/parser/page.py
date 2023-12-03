@@ -1,10 +1,17 @@
 import re
+from enum import Enum
 from typing import NamedTuple
+
+
+class EntryStatus(Enum):
+    VALID = ("valid",)
+    PART_OF_PREVIOUS_ENTRY = "part-of-previous-entry"
 
 
 class Entry(NamedTuple):
     headword: str
     definitions: str
+    status: EntryStatus
 
     @staticmethod
     def _clean_definitions(raw_definitions: str) -> str:
@@ -18,10 +25,18 @@ class Entry(NamedTuple):
     @classmethod
     def from_raw_entry(cls, raw_entry: str) -> "Entry":
         # Naive expectation: first word is headword.
-        # TODO: GH-16 better detection.
         parts = raw_entry.split(" ", maxsplit=1)
+        status = EntryStatus.VALID
 
-        return Entry(headword=parts[0], definitions=cls._clean_definitions(parts[1]))
+        # Headwords are expected to end in comma.
+        if parts[0][-1] != ",":
+            status = EntryStatus.PART_OF_PREVIOUS_ENTRY
+
+        return Entry(
+            headword=parts[0],
+            definitions=cls._clean_definitions(parts[1]),
+            status=status,
+        )
 
 
 class Page:
@@ -95,7 +110,6 @@ class Page:
             raw_entries = raw_entries[0:-2] + entries_for_letter
 
         # Format string entries to structures.
-        # TODO: GH-16 recognize incorrect headwords, append to previous entries.
         entries = [Entry.from_raw_entry(raw_entry) for raw_entry in raw_entries]
 
         return entries
