@@ -1,6 +1,8 @@
 import re
 from enum import Enum
-from typing import NamedTuple
+from typing import Final, NamedTuple
+
+METALINE_ENTRY_SEPARATOR: Final[str] = "—"
 
 
 class EntryStatus(Enum):
@@ -29,7 +31,7 @@ class Entry(NamedTuple):
         status = EntryStatus.VALID
 
         # Headwords are expected to end in comma.
-        if parts[0][-1] != ",":
+        if len(parts[0]) > 0 and parts[0][-1] != ",":
             status = EntryStatus.PART_OF_PREVIOUS_ENTRY
 
         return Entry(
@@ -41,6 +43,7 @@ class Entry(NamedTuple):
 
 class Page:
     _meta_parts: list[str] | None = None
+    _letters_in_page: list[str] | None = None
 
     def __init__(self, lines: list[str]) -> None:
         self.meta = lines[0]
@@ -53,6 +56,17 @@ class Page:
             self._meta_parts = [
                 splitted for splitted in self.meta.split(" ") if splitted != ""
             ]
+
+            # We generally expect to get three parts: page number, first entry, last entry.
+            # However, occasionally entries are dashed together. Try to separate them.
+            if (
+                len(self._meta_parts) == 2
+                and METALINE_ENTRY_SEPARATOR in self._meta_parts[1]
+            ):
+                self._meta_parts = [
+                    self._meta_parts[0],
+                    *self._meta_parts[1].split(METALINE_ENTRY_SEPARATOR),
+                ]
 
         return self._meta_parts
 
@@ -78,20 +92,34 @@ class Page:
         Most common case: all headwords start with same letter.
         However: it can be split between end of first & start of second letter.
         """
-        letters = set()
-        if self.is_left_side_page():
-            letters.add(self._get_meta_parts()[1][0].upper())
-            letters.add(self._get_meta_parts()[2][0].upper())
+        if not self._letters_in_page:
+            letters = set()
+            if self.is_left_side_page():
+                letters.add(self._get_meta_parts()[1][0].upper())
+                letters.add(self._get_meta_parts()[2][0].upper())
 
-        if self.is_right_side_page():
-            letters.add(self._get_meta_parts()[0][0].upper())
-            letters.add(self._get_meta_parts()[1][0].upper())
+            if self.is_right_side_page():
+                letters.add(self._get_meta_parts()[0][0].upper())
+                letters.add(self._get_meta_parts()[1][0].upper())
 
-        return sorted(list(letters))
+            self._letters_in_page = sorted(list(letters))
+
+        return self._letters_in_page
+
+    def set_letters_in_page(self, letters: list[str]) -> None:
+        self._letters_in_page = letters
 
     def get_entries(self) -> list[Entry]:
         def _line_is_entry(line: str) -> bool:
             parts = line.split(" ")
+
+            # Some exotic parts do not respect length, probably linebreakish thing.
+            # If it breaks, its not an
+            try:
+                parts[0][-1]
+            except IndexError:
+                return False
+
             return len(parts) == 1 and parts[0][-1] == ","
 
         raw_entries = ["\n".join(self.content)]
@@ -118,6 +146,10 @@ class Page:
             raw_entries = raw_entries[0:-2] + entries_for_letter
 
         # Format string entries to structures.
-        entries = [Entry.from_raw_entry(raw_entry) for raw_entry in raw_entries]
+        entries = [
+            Entry.from_raw_entry(raw_entry)
+            for raw_entry in raw_entries
+            if raw_entry != ""
+        ]
 
         return entries
