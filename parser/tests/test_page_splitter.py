@@ -31,8 +31,7 @@ def test_splits_page_correctly() -> None:
         "hvilken",  # Partial entry.
         "Axelskav,",
         "Axelseng,",
-        "Axeltand,\n"  # TODO: GH-27 linebreak in headword.
-        "\n",  # TODO: GH-27 this is actually part of the previous headword.
+        "Axeltand,",
         "Axel,",
         "Axelmærke,",
         "Axeniere,",
