@@ -29,7 +29,7 @@ def test_splits_page_correctly() -> None:
 
     expected_a_headwords = [
         "hvilken",  # Partial entry.
-        "AzelKøbstad",  # TODO: GH-32, capitalization.
+        "Azelkøbstad",
         "Axelskav",
         "Axeltorg",
         "Axelseng",

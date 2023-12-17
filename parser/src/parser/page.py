@@ -36,7 +36,10 @@ class Entry(NamedTuple):
 
         # Drop ending commas when present.
         if raw_headword[-1] == ",":
-            formatted_headword = formatted_headword[0:-1]
+            # Also capitalize, but only for entries ending in comma.
+            # Combined linebreak headwords can result in incorrect
+            # forms of capitalization. It is essentially error in OCR.
+            formatted_headword = formatted_headword[0:-1].capitalize()
 
         return formatted_headword
 
