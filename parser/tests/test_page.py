@@ -56,6 +56,7 @@ def test_parses_simple_entries() -> None:
         "Afkomst,",
         "Afkontrafej,",
         "Aalborg,",
+        "Afkontrafeje,",
         "Afkort,",
         "Afkorte,",
         "Afkortelse,",
@@ -65,6 +66,7 @@ def test_parses_simple_entries() -> None:
 
     expected_statuses = [
         EntryStatus.PART_OF_PREVIOUS_ENTRY,
+        EntryStatus.VALID,
         EntryStatus.VALID,
         EntryStatus.VALID,
         EntryStatus.VALID,

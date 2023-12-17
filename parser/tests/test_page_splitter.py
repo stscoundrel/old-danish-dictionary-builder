@@ -25,13 +25,16 @@ def test_splits_page_correctly() -> None:
 
     # Pages should have expected amounts of entries.
     a_entries = page_a.get_entries()
-    assert len(a_entries) == 7
+    assert len(a_entries) == 10
 
     expected_a_headwords = [
         "hvilken",  # Partial entry.
+        "AzelKøbstad,",  # TODO: GH-32, capitalization.
         "Axelskav,",
+        "Axeltorg,",
         "Axelseng,",
         "Axeltand,",
+        "Azelvej,",
         "Axel,",
         "Axelmærke,",
         "Axeniere,",
@@ -60,3 +63,15 @@ def test_splits_page_correctly() -> None:
     assert (
         b_entries[0].definitions == "go. 1) at tale uforståe- ligt. Moth;"
     )  # TODO: GH-29, part of content in next entry.
+
+    # Axeltorg was originally line-splitted headword. Ensure no content was lost in parsing.
+    expected_content = (
+        "no. lovlig udsalgsplads forpå axel tilførte varer; tbet føre the till tyskeland, som the aff arildz magnificus "
+        "et magnus. $. R. D. Il.tid pleege at føre till svineborgh, som er theres rette axel torgh (1480). Fynske Aktstk. "
+        "90; the haftde sielft ingen axeltoxff (1941). Geb. Ark. Årsb. TIL till. 33; ingen borger maakiøbe øxen paa "
+        "landsbyerne, dog bor-geme i kiøbstederne dermet ikke skal være formeent at købe paa deris axel- tore (1615). "
+        "Rosenv., G1. L. IV. 816; bønderne skulle føre deris vare ti] kiøbstæderne og dem paa offentlig axel-torve "
+        'fal holde. Chr. V. D. L. 38-18-26. "'
+    )
+
+    assert a_entries[3].definitions == expected_content
