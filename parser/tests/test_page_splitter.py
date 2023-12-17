@@ -29,15 +29,15 @@ def test_splits_page_correctly() -> None:
 
     expected_a_headwords = [
         "hvilken",  # Partial entry.
-        "AzelKøbstad,",  # TODO: GH-32, capitalization.
-        "Axelskav,",
-        "Axeltorg,",
-        "Axelseng,",
-        "Axeltand,",
-        "Azelvej,",
-        "Axel,",
-        "Axelmærke,",
-        "Axeniere,",
+        "AzelKøbstad",  # TODO: GH-32, capitalization.
+        "Axelskav",
+        "Axeltorg",
+        "Axelseng",
+        "Axeltand",
+        "Azelvej",
+        "Axel",
+        "Axelmærke",
+        "Axeniere",
     ]
 
     assert [entry.headword for entry in a_entries] == expected_a_headwords
@@ -52,9 +52,9 @@ def test_splits_page_correctly() -> None:
     assert len(page_b.get_entries()) == 3
 
     expected_b_headwords = [
-        "Bable,",
-        "Babel,",  # TODO: GH-29, should be part of previous entry.
-        "Babler,",
+        "Bable",
+        "Babel",  # TODO: GH-29, should be part of previous entry.
+        "Babler",
     ]
 
     assert [entry.headword for entry in b_entries] == expected_b_headwords

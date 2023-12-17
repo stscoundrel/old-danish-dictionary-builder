@@ -30,6 +30,16 @@ class Entry(NamedTuple):
         # though the headword is alreay complete.
         return raw_headword.replace("\n", "").strip()
 
+    @staticmethod
+    def _clean_headword_presentation(raw_headword: str) -> str:
+        formatted_headword = raw_headword
+
+        # Drop ending commas when present.
+        if raw_headword[-1] == ",":
+            formatted_headword = formatted_headword[0:-1]
+
+        return formatted_headword
+
     @classmethod
     def from_raw_entry(cls, raw_entry: str) -> "Entry":
         # Naive expectation: first word is headword.
@@ -50,7 +60,7 @@ class Entry(NamedTuple):
             definitions = " ".join(definitions.split(" ")[1:])
 
         return Entry(
-            headword=headword,
+            headword=cls._clean_headword_presentation(headword),
             definitions=definitions,
             status=status,
         )
