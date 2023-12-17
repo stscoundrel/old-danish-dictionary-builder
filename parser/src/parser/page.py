@@ -24,6 +24,12 @@ class Entry(NamedTuple):
             [splitted for splitted in cleaned_definitions.split(" ") if splitted != ""]
         )
 
+    @staticmethod
+    def _clean_headword(raw_headword: str) -> str:
+        # Drop linebreaks, headword may end in one even
+        # though the headword is alreay complete.
+        return raw_headword.replace("\n", "")
+
     @classmethod
     def from_raw_entry(cls, raw_entry: str) -> "Entry":
         # Naive expectation: first word is headword.
@@ -35,7 +41,7 @@ class Entry(NamedTuple):
             status = EntryStatus.PART_OF_PREVIOUS_ENTRY
 
         return Entry(
-            headword=parts[0],
+            headword=cls._clean_headword(parts[0]),
             definitions=cls._clean_definitions(parts[1]),
             status=status,
         )
