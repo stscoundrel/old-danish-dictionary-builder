@@ -28,7 +28,7 @@ class Entry(NamedTuple):
     def _clean_headword(raw_headword: str) -> str:
         # Drop linebreaks, headword may end in one even
         # though the headword is alreay complete.
-        return raw_headword.replace("\n", "")
+        return raw_headword.replace("\n", "").strip()
 
     @classmethod
     def from_raw_entry(cls, raw_entry: str) -> "Entry":
@@ -36,13 +36,22 @@ class Entry(NamedTuple):
         parts = raw_entry.split(" ", maxsplit=1)
         status = EntryStatus.VALID
 
+        headword = cls._clean_headword(parts[0])
+        definitions = cls._clean_definitions(parts[1])
+
         # Headwords are expected to end in comma.
-        if len(parts[0]) > 0 and parts[0][-1] != ",":
+        if len(headword) > 0 and headword[-1] not in [",", "-"]:
             status = EntryStatus.PART_OF_PREVIOUS_ENTRY
 
+        # Headwords with line breaks end in dash.
+        # Glue the headword back together.
+        if len(headword) > 0 and headword[-1] == "-":
+            headword = f"{headword[0:-1]}{definitions.split(' ')[0]}"
+            definitions = " ".join(definitions.split(" ")[1:])
+
         return Entry(
-            headword=cls._clean_headword(parts[0]),
-            definitions=cls._clean_definitions(parts[1]),
+            headword=headword,
+            definitions=definitions,
             status=status,
         )
 
@@ -77,7 +86,10 @@ class Page:
         return self._meta_parts
 
     def get_separators_for(self, letter: str) -> list[str]:
-        return [rf"(\b{letter}\w+\b,)"]  # Capital letter and words ends in comma.
+        return [
+            rf"(\b{letter}\w+\b,)",  # Capital letter and words ends in comma.
+            rf"(\b{letter}\w+\b-)",  # Capital letter and words ends in dash, ie. linebreak.
+        ]
 
     def get_entry_separators(self) -> set[str]:
         return {
@@ -126,7 +138,7 @@ class Page:
             except IndexError:
                 return False
 
-            return len(parts) == 1 and parts[0][-1] == ","
+            return len(parts) == 1 and parts[0][-1] in [",", "-"]
 
         raw_entries = ["\n".join(self.content)]
 
@@ -141,13 +153,14 @@ class Page:
             entries_for_letter = []
 
             for idx, line in enumerate(line_entries_for_letter):
-                if idx == 0:
-                    entries_for_letter.append(line)
+                if line:
+                    if idx == 0:
+                        entries_for_letter.append(line)
 
-                if _line_is_entry(line):
-                    entries_for_letter.append(line)
-                else:
-                    entries_for_letter[-1] = f"{entries_for_letter[-1]}{line}"
+                    if _line_is_entry(line):
+                        entries_for_letter.append(line)
+                    else:
+                        entries_for_letter[-1] = f"{entries_for_letter[-1]}{line}"
 
             raw_entries = raw_entries[0:-2] + entries_for_letter
 
