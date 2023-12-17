@@ -49,19 +49,19 @@ def test_parses_simple_entries() -> None:
 
     expected_headwords = [
         "af",  # Partial, part of last page.
-        "Afklappe,",
-        "Afklare,",
-        "Afkom,",
-        "Afkomme,",
-        "Afkomst,",
-        "Afkontrafej,",
-        "Aalborg,",
-        "Afkontrafeje,",
-        "Afkort,",
-        "Afkorte,",
-        "Afkortelse,",
-        "Afkvædet,",
-        "Afkynde,",
+        "Afklappe",
+        "Afklare",
+        "Afkom",
+        "Afkomme",
+        "Afkomst",
+        "Afkontrafej",
+        "Aalborg",
+        "Afkontrafeje",
+        "Afkort",
+        "Afkorte",
+        "Afkortelse",
+        "Afkvædet",
+        "Afkynde",
     ]
 
     expected_statuses = [
