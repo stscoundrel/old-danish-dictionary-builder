@@ -12,7 +12,7 @@ Currently work-in-progress, but the goal is to offer JSON dataset with normalize
 - Parse ORC results to machine-readable structured formats.
 
 
-### Run scraper to download page images.
+### 1. Run scraper to download page images.
 
 Setup Maven & run `mvn install` inside the `scraper` subfolder. Best of luck with that.
 
@@ -21,6 +21,24 @@ To run the scraper script:
 `mvn spring-boot:run`
 
 Images will be downloaded to `scraper/resources/images` folder.
+
+### 2. Run OCR to turn images to text
+
+Setup Node.js 20+ (eg. via NVM) & run `npm/yarn install` inside the `image-to-text` subfolder.
+
+Copy `images` folder from step one to `image-to-text/resources` folder. Add empty `text` folder to the same resources folder.
+
+To run the images-to-text script:
+
+`yarn images-to-text`
+
+or
+
+`npm run images-to-text`
+
+This is likely to take long, possibly hours.
+
+Text files will be generated to `image-to-text/resources/text` folder.
 
 
 ### About "Dictionary of the Old Danish Language"
