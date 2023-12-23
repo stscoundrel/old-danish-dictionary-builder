@@ -11,6 +11,18 @@ Currently work-in-progress, but the goal is to offer JSON dataset with normalize
 ## Upcoming features
 - Parse ORC results to machine-readable structured formats.
 
+
+### Run scraper to download page images.
+
+Setup Maven & run `mvn install` inside the `scraper` subfolder. Best of luck with that.
+
+To run the scraper script:
+
+`mvn spring-boot:run`
+
+Images will be downloaded to `scraper/resources/images` folder.
+
+
 ### About "Dictionary of the Old Danish Language"
 
 _"Ordbog til det ældre danske Sprog"_ dictionary was published in late 1800s by Otto Kalkar. Old Danish is an ancestor language of Danish, which developed from Old East Norse, the eastern dialect of Old Norse, at the end of the Viking Age. The dictionary itself is called "the dictionary of elder Danish speech" and it covers time period of 1300 - 1700.
