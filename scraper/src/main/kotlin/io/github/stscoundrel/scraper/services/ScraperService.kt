@@ -24,7 +24,6 @@ class ScraperService {
         "n",
         "o",
         "p",
-        "k",
         "r",
         "s",
         "t",
@@ -34,7 +33,6 @@ class ScraperService {
         "ae",
         "oe",
         "aa",
-        "ae" // Hidden page not in navigation.
     )
 
     private fun getImageLinks(page: Page): MutableList<Pair<String, String>> {
