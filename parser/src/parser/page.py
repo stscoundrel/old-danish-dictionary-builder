@@ -19,19 +19,34 @@ class Page:
             # Meta row often contains multitude of extra spaces.
             # Just drop them from actual meta parts when splitting.
             self._meta_parts = [
-                splitted for splitted in self.meta.split(" ") if splitted != ""
+                splitted.replace("\n", "")
+                for splitted in self.meta.split(" ")
+                if splitted != ""
             ]
 
             # We generally expect to get three parts: page number, first entry, last entry.
+            # (or reverse for other side pages)
             # However, occasionally entries are dashed together. Try to separate them.
-            if (
-                len(self._meta_parts) == 2
-                and METALINE_ENTRY_SEPARATOR in self._meta_parts[1]
-            ):
-                self._meta_parts = [
-                    self._meta_parts[0],
-                    *self._meta_parts[1].split(METALINE_ENTRY_SEPARATOR),
-                ]
+            if len(self._meta_parts) == 2:
+                number_part = (
+                    self._meta_parts[0]
+                    if self.is_left_side_page()
+                    else self._meta_parts[1]
+                )
+                words_part = (
+                    self._meta_parts[1]
+                    if self.is_left_side_page()
+                    else self._meta_parts[0]
+                )
+
+                if METALINE_ENTRY_SEPARATOR in words_part:
+                    split_words = words_part.split(METALINE_ENTRY_SEPARATOR)
+                    formatted_meta_parts = (
+                        [number_part, *split_words]
+                        if self.is_left_side_page()
+                        else [*split_words, number_part]
+                    )
+                    self._meta_parts = formatted_meta_parts
 
         return self._meta_parts
 
@@ -82,7 +97,7 @@ class Page:
             parts = line.split(" ")
 
             # Some exotic parts do not respect length, probably linebreakish thing.
-            # If it breaks, its not an
+            # If it breaks, its not an entry.
             try:
                 parts[0][-1]
             except IndexError:
@@ -106,6 +121,7 @@ class Page:
                 if line:
                     if idx == 0:
                         entries_for_letter.append(line)
+                        continue
 
                     if _line_is_entry(line):
                         entries_for_letter.append(line)
@@ -118,7 +134,9 @@ class Page:
         entries = [
             Entry.from_raw_entry(raw_entry)
             for raw_entry in raw_entries
-            if raw_entry != ""
+            # Some lines are either empty, or consists of title letter, or consist of linebreaks.
+            # Drop them from entry parsing.
+            if len(raw_entry.replace("\n", "")) > 1
         ]
 
         return entries
