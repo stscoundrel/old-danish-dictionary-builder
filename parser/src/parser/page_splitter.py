@@ -17,14 +17,13 @@ LETTER_SPLIT_MAPPING: Final[dict[str, int]] = {
     "1912-mørsk.txt": 21,
     "2005-nøvelige.txt": 23,
     "2172-øxentorv.txt": 18,
-    "2639-røtte (rotte).txt": 38,
-    "3173-søstergård.txt": 26,
-    "3408-tøve.txt": 16,
-    "3806-vævel.txt": 49,
-    "3807-ybisk.txt": 12,
-    "3839-æven[æm]tyrlig.txt": 25,  # TODO: GH-37
-    "3887-årtrålig.txt": 37,
-    "3912-æven[æm]tyrlig.txt": 25,  # TODO: GH-37
+    "2387-røtte (rotte).txt": 38,
+    "2921-søstergård.txt": 26,
+    "3156-tøve.txt": 16,
+    "3554-vævel.txt": 49,
+    "3555-ybisk.txt": 12,
+    "3587-æven[æm]tyrlig.txt": 25,
+    "3635-årtrålig.txt": 37,
 }
 
 
