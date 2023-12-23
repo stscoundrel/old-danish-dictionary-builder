@@ -33,7 +33,8 @@ const getScheduler = async (): Promise<Tesseract.Scheduler> => {
 async function processImages() {
   try {
     const allFiles = await fs.promises.readdir(inputPath);
-    const batches: string[][] = chunkArray(allFiles, BATCH_SIZE);
+    const imageFiles = allFiles.filter((file) => file.endsWith(".gif"));
+    const batches: string[][] = chunkArray(imageFiles, BATCH_SIZE);
     const scheduler = await getScheduler();
 
     for (let i = 0; i <= batches.length; i += 1) {
