@@ -1,5 +1,10 @@
 from enum import Enum
-from typing import NamedTuple
+from typing import Final, NamedTuple
+
+KNOWN_HEADWORD_TYPOS_TO_CORRECT_VERSIONS: Final[dict[str, str]] = {
+    "Azelkøbstad": "Axelkøbstad",
+    "Azelvej": "Axelvej",
+}
 
 
 class EntryStatus(Enum):
@@ -28,7 +33,15 @@ class Entry(NamedTuple):
         return raw_headword.replace("\n", "").strip()
 
     @staticmethod
-    def _clean_headword_presentation(raw_headword: str) -> str:
+    def _proofread_headword(raw_headword: str) -> str:
+        # OCR results in decent, but not 100% correct results. There are inevitable typos.
+        # While there are no doubt typos in definitions, it is more important to patch
+        # them to headwords, as that is how words are searched. Add them to mapping as
+        # we come across them.
+        return KNOWN_HEADWORD_TYPOS_TO_CORRECT_VERSIONS.get(raw_headword, raw_headword)
+
+    @classmethod
+    def _clean_headword_presentation(cls, raw_headword: str) -> str:
         formatted_headword = raw_headword
 
         # Drop ending commas when present.
@@ -38,7 +51,8 @@ class Entry(NamedTuple):
             # forms of capitalization. It is essentially error in OCR.
             formatted_headword = formatted_headword[0:-1].capitalize()
 
-        return formatted_headword
+        # Fix known typos.
+        return cls._proofread_headword(formatted_headword)
 
     @classmethod
     def from_raw_entry(cls, raw_entry: str) -> "Entry":
