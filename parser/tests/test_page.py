@@ -1,5 +1,6 @@
 from src.parser import columns
-from src.parser.page import EntryStatus, Page
+from src.parser.entry import EntryStatus
+from src.parser.page import Page
 from tests import open_test_file
 
 
