@@ -29,12 +29,12 @@ def test_splits_page_correctly() -> None:
 
     expected_a_headwords = [
         "hvilken",  # Partial entry.
-        "Azelkøbstad",
+        "Axelkøbstad",
         "Axelskav",
         "Axeltorg",
         "Axelseng",
         "Axeltand",
-        "Azelvej",
+        "Axelvej",
         "Axel",
         "Axelmærke",
         "Axeniere",
