@@ -69,4 +69,7 @@ class PageSplitter:
         if letter == "F":
             return "E"
 
+        if letter == "Y":
+            return "V"
+
         raise NotImplementedError(f"No handling for letter {letter}!")
