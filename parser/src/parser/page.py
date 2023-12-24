@@ -52,8 +52,8 @@ class Page:
 
     def get_separators_for(self, letter: str) -> list[str]:
         return [
-            rf"(\b{letter}\w+\b,)",  # Capital letter and words ends in comma.
-            rf"(\b{letter}\w+\b-)",  # Capital letter and words ends in dash, ie. linebreak.
+            rf"(\b{letter}[\w\S]+\b,)",  # Capital letter and words ends in comma.
+            rf"(\b{letter}[\w\S]+\b-)",  # Capital letter and words ends in dash, ie. linebreak.
         ]
 
     def get_entry_separators(self) -> set[str]:
