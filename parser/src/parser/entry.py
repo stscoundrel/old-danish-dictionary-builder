@@ -8,6 +8,8 @@ KNOWN_HEADWORD_TYPOS_TO_CORRECT_VERSIONS: Final[dict[str, str]] = {
     "Ya(eyfærdig": "Yd(e)færdig",
 }
 
+EXCEPTIONS_TO_COMMA_RULE: Final[list[str]] = ["X"]
+
 
 class EntryStatus(Enum):
     VALID = ("valid",)
@@ -18,6 +20,17 @@ class Entry(NamedTuple):
     headword: str
     definitions: str
     status: EntryStatus
+
+    @staticmethod
+    def combine_entries(first_entry: "Entry", second_entry: "Entry") -> "Entry":
+        assert first_entry.status != EntryStatus.PART_OF_PREVIOUS_ENTRY
+        assert second_entry.status == EntryStatus.PART_OF_PREVIOUS_ENTRY
+
+        return Entry(
+            headword=first_entry.headword,
+            status=first_entry.status,
+            definitions=f"{first_entry.definitions} {second_entry.headword} {second_entry.definitions}",
+        )
 
     @staticmethod
     def _clean_definitions(raw_definitions: str) -> str:
@@ -66,7 +79,11 @@ class Entry(NamedTuple):
         definitions = cls._clean_definitions(parts[1])
 
         # Headwords are expected to end in comma.
-        if len(headword) > 0 and headword[-1] not in [",", "-"]:
+        if (
+            len(headword) > 0
+            and headword[-1] not in [",", "-"]
+            and headword not in EXCEPTIONS_TO_COMMA_RULE
+        ):
             status = EntryStatus.PART_OF_PREVIOUS_ENTRY
 
         # Headwords with line breaks end in dash.
