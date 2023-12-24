@@ -128,28 +128,28 @@ def test_splits_page_of_numbers_in_column_separators() -> None:
     This test case guards one of those cases without caring much how it was/is solved.
     """
 
-    v_to_y = open_test_file("split-v-to-y.txt")
+    v_to_y = open_test_file("split-x-to-y.txt")
 
-    page_v, page_y = PageSplitter.split_page("3555-ybisk.txt", v_to_y)
+    page_x, page_y = PageSplitter.split_page("3555-ybisk.txt", v_to_y)
 
     # Page side should be shared between the split siblings.
-    assert page_v.is_right_side_page() is True
+    assert page_x.is_right_side_page() is True
     assert page_y.is_right_side_page() is True
 
     # Pages should have separated available letters.
-    assert page_v.get_letters_in_page() == ["V"]
+    assert page_x.get_letters_in_page() == ["V"]
     assert page_y.get_letters_in_page() == ["Y"]
 
     # Pages should have expected amounts of entries.
-    v_entries = page_v.get_entries()
+    x_entries = page_x.get_entries()
     y_entries = page_y.get_entries()
-    assert len(v_entries) == 1
+    assert len(x_entries) == 1
     assert len(y_entries) == 8
 
-    assert v_entries[0].status == EntryStatus.PART_OF_PREVIOUS_ENTRY
-    assert v_entries[0].headword == "SP"  # Not an actual headword, as stated by status.
+    assert x_entries[0].status == EntryStatus.PART_OF_PREVIOUS_ENTRY
+    assert x_entries[0].headword == "SP"  # Not an actual headword, as stated by status.
 
-    assert v_entries[0].definitions == (
+    assert x_entries[0].definitions == (
         '€2" (ovf. IV. 662211); med x for v jeg vilde let mit regenskab forklare. ABI. 58b; '
         "jeg X for V har skrevet og været falsk og treedsk. KS 120; at dskrive x for v, at skære "
         'een en skak- lose 0: veed, hvad een tjener, saa hand derved skakker noget. PSO IL. 27"; — '
