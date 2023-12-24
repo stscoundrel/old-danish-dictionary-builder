@@ -144,7 +144,7 @@ def test_splits_page_of_numbers_in_column_separators() -> None:
     v_entries = page_v.get_entries()
     y_entries = page_y.get_entries()
     assert len(v_entries) == 1
-    assert len(y_entries) == 7
+    assert len(y_entries) == 8
 
     assert v_entries[0].status == EntryStatus.PART_OF_PREVIOUS_ENTRY
     assert v_entries[0].headword == "SP"  # Not an actual headword, as stated by status.
@@ -163,7 +163,7 @@ def test_splits_page_of_numbers_in_column_separators() -> None:
         "Ybisk",
         "Yde",
         "Yde",
-        # TODO: GH-42 missing Yaeyfærdig here.
+        "Ya(eyfærdig",
         "Ydefærds",
         "Ydefør",
         "Ydegås",
