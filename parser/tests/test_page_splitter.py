@@ -163,7 +163,7 @@ def test_splits_page_of_numbers_in_column_separators() -> None:
         "Ybisk",
         "Yde",
         "Yde",
-        "Ya(eyfærdig",
+        "Yd(e)færdig",
         "Ydefærds",
         "Ydefør",
         "Ydegås",
