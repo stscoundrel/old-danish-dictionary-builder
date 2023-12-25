@@ -25,7 +25,7 @@ def test_combines_entries() -> None:
     entries = dictionary.get_entries()
 
     expected_headwords = [
-        # TODO: GH-47 There should be partial entry here, "fremede".
+        "fremede",  # Partial, as previous page is not loaded in test.
         "Vævel",
         "Vævle",
         "Vævleri",
@@ -89,9 +89,9 @@ def test_combines_entries() -> None:
     assert [entry.headword for entry in entries] == expected_headwords
 
     # Two entries should have been combined with the entry that followed them.
-    assert entries[22].headword == "X"
-    assert entries[22].status == EntryStatus.VALID
-    assert entries[22].definitions == (
+    assert entries[23].headword == "X"
+    assert entries[23].status == EntryStatus.VALID
+    assert entries[23].definitions == (
         "i forb x for v (u) 0: 10 for 5 (efter talværdien som romertal) i ud- tryk om at bedrage; for L "
         "at skriffve 0, for V at sætte X. Ska 11 (= vår V schriven X. (Lappenbergs udg) 1. v 187); TkA I. "
         '131 (ovf. u. fram); I SP €2" (ovf. IV. 662211); med x for v jeg vilde let mit regenskab forklare. '
@@ -104,10 +104,10 @@ def test_combines_entries() -> None:
     )
 
     # Two entries should have been combined with the entry that followed them.
-    assert entries[30].headword == "Ydeko"
-    assert entries[30].status == EntryStatus.VALID
+    assert entries[31].headword == "Ydeko"
+    assert entries[31].status == EntryStatus.VALID
 
-    assert entries[30].definitions == (
+    assert entries[31].definitions == (
         "no. ko, der gaves som afgift; hwat som the giffuit haffueere en two marck for een ydhe koo (1466). "
         "DC 183; 58 ydhekiør (1523). DM4 II. 4; tilltallit kronens bønder for the icke ville yde hannom "
         "theris yde-koer (1553). Rsv I 210. Jf Bernts Il. 179; skatteko ovf. —"

@@ -14,6 +14,7 @@ EXCEPTIONS_TO_COMMA_RULE: Final[list[str]] = ["X"]
 class EntryStatus(Enum):
     VALID = ("valid",)
     PART_OF_PREVIOUS_ENTRY = "part-of-previous-entry"
+    DELETED = "deleted"
 
 
 class Entry(NamedTuple):
@@ -30,6 +31,14 @@ class Entry(NamedTuple):
             headword=first_entry.headword,
             status=first_entry.status,
             definitions=f"{first_entry.definitions} {second_entry.headword} {second_entry.definitions}",
+        )
+
+    @staticmethod
+    def mark_for_deletion(entry: "Entry") -> "Entry":
+        return Entry(
+            headword=entry.headword,
+            status=EntryStatus.DELETED,
+            definitions=entry.definitions,
         )
 
     @staticmethod
