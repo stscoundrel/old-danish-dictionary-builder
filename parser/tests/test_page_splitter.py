@@ -112,11 +112,14 @@ def test_splits_page_of_unknown_first_letter_correctly() -> None:
         "om areth, sagefaldh oc brøde (1493). D. Mag. IV. 12. Vistnok = ejgt (9: ægt), se d. 0."
     )
 
-    expected_f_headwords = ["Fabel", "Fabelhøne,.no.", "Fabel", "Fabian", "Fad"]
+    expected_f_headwords = ["Fabel", "Fabelhøne", "Fabel", "Fabian", "Fad"]
 
     assert [entry.headword for entry in f_entries] == expected_f_headwords
 
-    assert f_entries[1].definitions == "= fabelhans (om kvinder). Moth. Smlgn. byhøne."
+    assert (
+        f_entries[1].definitions
+        == ".no. = fabelhans (om kvinder). Moth. Smlgn. byhøne."
+    )
 
 
 def test_splits_page_of_numbers_in_column_separators() -> None:
