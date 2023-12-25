@@ -35,11 +35,19 @@ class Dictionary:
         for idx, entry in enumerate(entries):
             if idx > 0:
                 if entry.status == EntryStatus.PART_OF_PREVIOUS_ENTRY:
+                    # Replace previous entry with combined entry, mark current entry for deletion.
+                    # Individual entries are immutable, so we're replacing them with new instances.
                     entries[idx - 1] = Entry.combine_entries(entries[idx - 1], entry)
+                    entries[idx] = Entry.mark_for_deletion(entry)
 
-        # TODO: GH-47 log or handle for entries that remain invalid.
         filtered_entries = [
-            entry for entry in entries if entry.status == EntryStatus.VALID
+            entry for entry in entries if entry.status != EntryStatus.DELETED
         ]
+
+        for entry in filtered_entries:
+            if entry.status != EntryStatus.VALID:
+                print("Unexpected entry!")
+                print(entry.headword)
+                print(entry.status)
 
         return filtered_entries
