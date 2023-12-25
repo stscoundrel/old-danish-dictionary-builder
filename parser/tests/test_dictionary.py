@@ -37,7 +37,7 @@ def test_combines_entries() -> None:
         "Væverskib",
         "Væverskøjte",
         "Væverskøn",
-        "Væverestuve,0",
+        "Væverestuve",
         "Væveri",
         "Væve(r)ske",
         "Vævig",
@@ -79,8 +79,7 @@ def test_combines_entries() -> None:
         "Ymle",
         "Ymme",
         "Ymmel",
-        # TODO: GH-46 "Ymte,hafide",  false positive linebreak combination.
-        # TODO: GH-46, the above entry is dropped as false-positive invalid.
+        "Ymte",
         "Ymne",
         "Yderst",
         "Ymnu",

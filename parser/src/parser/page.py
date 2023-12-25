@@ -126,7 +126,11 @@ class Page:
                     if _line_is_entry(line):
                         entries_for_letter.append(line)
                     else:
-                        entries_for_letter[-1] = f"{entries_for_letter[-1]}{line}"
+                        # Line may contain linebreaks, which are not required at the beginning.
+                        line_without_breaks = line.lstrip("\\n")
+                        entries_for_letter[
+                            -1
+                        ] = f"{entries_for_letter[-1]} {line_without_breaks}"
 
             raw_entries = raw_entries[0:-2] + entries_for_letter
 
