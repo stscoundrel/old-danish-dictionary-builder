@@ -22,6 +22,12 @@ class Entry(NamedTuple):
     definitions: str
     status: EntryStatus
 
+    def to_json(self) -> dict[str, str]:
+        return {
+            "headword": self.headword,
+            "definitions": self.definitions,
+        }
+
     @staticmethod
     def combine_entries(first_entry: "Entry", second_entry: "Entry") -> "Entry":
         assert first_entry.status != EntryStatus.PART_OF_PREVIOUS_ENTRY
@@ -69,7 +75,7 @@ class Entry(NamedTuple):
         formatted_headword = raw_headword
 
         # Drop ending commas when present.
-        if raw_headword[-1] == ",":
+        if len(raw_headword) > 0 and raw_headword[-1] == ",":
             # Also capitalize, but only for entries ending in comma.
             # Combined linebreak headwords can result in incorrect
             # forms of capitalization. It is essentially error in OCR.
