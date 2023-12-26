@@ -1,5 +1,6 @@
 from typing import NamedTuple
 
+from src.parser import columns
 from src.parser.entry import Entry, EntryStatus
 from src.parser.page import Page
 from src.parser.page_splitter import PageSplitter
@@ -24,7 +25,7 @@ class Dictionary:
                 pages.append(page1)
                 pages.append(page2)
             else:
-                pages.append(Page(lines=dictionary_page.lines))
+                pages.append(Page(lines=columns.parse_column(dictionary_page.lines)))
 
         self._pages = pages
 
