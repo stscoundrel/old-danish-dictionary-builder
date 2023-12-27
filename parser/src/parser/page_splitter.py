@@ -40,9 +40,14 @@ class PageSplitter:
         split_point = LETTER_SPLIT_MAPPING[filename]
 
         # Split by the split point, but append meta line to the second part too.
-        combined_column_1_lines = parse_column(lines[0:split_point])
-        combined_column_2_lines = parse_column([lines[0]] + lines[split_point:])
-        page1, page2 = (Page(combined_column_1_lines), Page(combined_column_2_lines))
+        combined_column_1_lines = parse_column(page=lines[0:split_point], name=filename)
+        combined_column_2_lines = parse_column(
+            page=[lines[0]] + lines[split_point:], name=filename
+        )
+        page1, page2 = (
+            Page(lines=combined_column_1_lines),
+            Page(lines=combined_column_2_lines),
+        )
 
         # We expect pages to have two letters maximum.
         letters = page1.get_letters_in_page()

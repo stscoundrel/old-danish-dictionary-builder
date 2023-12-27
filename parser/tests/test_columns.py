@@ -27,6 +27,6 @@ def test_column_combining() -> None:
         "over Ingeborg Gyldenstjerne.",
     ]
 
-    result = columns.parse_column(input)
+    result = columns.parse_column(input, "dummy-name")
 
     assert result == expected
