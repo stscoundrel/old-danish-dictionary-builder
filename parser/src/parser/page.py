@@ -11,6 +11,7 @@ class Page:
     _letters_in_page: list[str] | None = None
 
     def __init__(self, lines: list[str]) -> None:
+        # While pages have irregular meta lines, column parsing should've offsetted it already.
         self.meta = lines[0]
         self.content = lines[1:]
 
@@ -94,7 +95,8 @@ class Page:
 
     def get_entries(self) -> list[Entry]:
         def _line_is_entry(line: str) -> bool:
-            parts = line.split(" ")
+            # Break into words, omitting spacing the beginning.
+            parts = line.lstrip().split(" ")
 
             # Some exotic parts do not respect length, probably linebreakish thing.
             # If it breaks, its not an entry.

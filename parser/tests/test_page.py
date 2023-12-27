@@ -4,17 +4,21 @@ from src.parser.page import Page
 from tests import open_test_file
 
 
-def _single_column_test_file(file: str) -> list[str]:
+def _single_column_test_file(file: str, name: str) -> list[str]:
     input = open_test_file(file)
-    return columns.parse_column(input)
+    return columns.parse_column(input, name)
 
 
 def test_page_side_meta() -> None:
-    left_page_input = _single_column_test_file("simple-page.txt")
-    right_page_input = _single_column_test_file("simple-page-linebreaks.txt")
+    left_page_input = _single_column_test_file(
+        file="simple-page.txt", name="irrelevant-name"
+    )
+    right_page_input = _single_column_test_file(
+        file="simple-page-linebreaks.txt", name="irrelevant-name"
+    )
 
-    left_page = Page(left_page_input)
-    right_page = Page(right_page_input)
+    left_page = Page(lines=left_page_input)
+    right_page = Page(lines=right_page_input)
 
     assert left_page.is_left_side_page() is True
     assert right_page.is_right_side_page() is True
@@ -24,28 +28,43 @@ def test_page_side_meta() -> None:
 
 
 def test_page_letters_meta() -> None:
-    one_letter_left_page_input = _single_column_test_file("simple-page.txt")
-    one_letter_right_page_input = _single_column_test_file("simple-page-linebreaks.txt")
+    one_letter_left_page_input = _single_column_test_file(
+        file="simple-page.txt", name="irrelevant-name"
+    )
+    one_letter_right_page_input = _single_column_test_file(
+        file="simple-page-linebreaks.txt", name="irrelevant-name"
+    )
     two_letters_right_page_input = _single_column_test_file(
-        "simple-page-linebreaks-two-letters.txt"
+        "simple-page-linebreaks-two-letters.txt", name="irrelevant-name"
+    )
+    one_letter_irregular_meta_input = _single_column_test_file(
+        file="simple-page-irregular-meta-line.txt",
+        name="71-arbejdelse.txt",  # Exception by name!
     )
 
-    page1 = Page(one_letter_left_page_input)
-    page2 = Page(one_letter_right_page_input)
-    page3 = Page(two_letters_right_page_input)
+    page1 = Page(lines=one_letter_left_page_input)
+    page2 = Page(lines=one_letter_right_page_input)
+    page3 = Page(lines=two_letters_right_page_input)
+    page4 = Page(lines=one_letter_irregular_meta_input)
 
     assert page1.get_letters_in_page() == ["A"]
     assert page2.get_letters_in_page() == ["A"]
     assert page3.get_letters_in_page() == ["J", "K"]
+    assert page4.get_letters_in_page() == [
+        "A",
+        "Å",
+    ]  # TODO GH-55: incorrect OCR for second letter. Should be detected, as å shouldn't come after a.
 
 
 def test_parses_simple_entries() -> None:
     """
     Simple entries: one letter in more-or-less straightforward OCR'd page.
     """
-    one_letter_left_page_input = _single_column_test_file("simple-page.txt")
+    one_letter_left_page_input = _single_column_test_file(
+        file="simple-page.txt", name="irrelevant-name"
+    )
 
-    page = Page(one_letter_left_page_input)
+    page = Page(lines=one_letter_left_page_input)
     entries = page.get_entries()
 
     expected_headwords = [
@@ -98,3 +117,48 @@ def test_parses_simple_entries() -> None:
     assert [entry.status for entry in entries] == expected_statuses
 
     assert entries[4].definitions == expected_content
+
+
+def test_parses_simple_entries_from_irregular_offset_page() -> None:
+    """
+    Page has irregular meta line, so entries start at irregular index.
+    """
+    irregular_lines_input = _single_column_test_file(
+        file="simple-page-irregular-meta-line.txt",
+        name="71-arbejdelse.txt",  # Exception by name!
+    )
+
+    page = Page(lines=irregular_lines_input)
+    entries = page.get_entries()
+
+    expected_headwords = [
+        "Dég",  # TODO: GH-56 incorrect entry detection.
+        "Arbejdelse",
+        "Axbørst",
+        "Ardag",
+        "Ardzmesse",
+        "Are",
+        "Arel",
+        "Areld",
+        "Areldsæd",
+        "Arene",
+        # TODO: should have. "Arfbidt". Probably due to GH-55
+        "Arg",
+    ]
+
+    expected_statuses = [
+        EntryStatus.VALID,  # TODO: GH-56 incorrect entry detection.
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+    ]
+
+    assert [entry.headword for entry in entries] == expected_headwords
+    assert [entry.status for entry in entries] == expected_statuses

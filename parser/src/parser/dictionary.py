@@ -25,7 +25,13 @@ class Dictionary:
                 pages.append(page1)
                 pages.append(page2)
             else:
-                pages.append(Page(lines=columns.parse_column(dictionary_page.lines)))
+                pages.append(
+                    Page(
+                        lines=columns.parse_column(
+                            dictionary_page.lines, name=dictionary_page.name
+                        )
+                    )
+                )
 
         self._pages = pages
 

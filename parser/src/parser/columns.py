@@ -1,5 +1,7 @@
 from typing import Final
 
+from src.parser.meta_line import MetaLine
+
 _vertical_divider: Final[str] = "|"
 _exlamation_divider: Final[str] = " ! "
 _spaces_divider: Final[str] = "   "
@@ -48,11 +50,14 @@ def _get_divided_lines(line: str) -> list[str]:
     return [line[: len(line) // 2], line[len(line) // 2 :]]  # noqa: E203
 
 
-def parse_column(page: list[str]) -> list[str]:
+def parse_column(page: list[str], name: str) -> list[str]:
     left_column = []
     right_column = []
 
-    for line in page[1:]:  # First line is meta info.
+    meta_line_index = MetaLine.get_meta_line_index(name=name, lines=page)
+    content_start_index = meta_line_index + 1  # Dont parse meta into columns.
+
+    for line in page[content_start_index:]:
         if len(line) > 20:  # Skip letter headings and oddities.
             divided = _get_divided_lines(line)
 
@@ -69,13 +74,4 @@ def parse_column(page: list[str]) -> list[str]:
                     print("Unexpected split!")
                     print(line)
 
-    return [page[0]] + left_column + right_column
-
-
-def parse_columns(pages: list[list[str]]) -> list[list[str]]:
-    single_column_pages = []
-
-    for page in pages:
-        single_column_pages.append(parse_column(page))
-
-    return single_column_pages
+    return [page[meta_line_index]] + left_column + right_column
