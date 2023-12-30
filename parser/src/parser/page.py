@@ -105,6 +105,14 @@ class Page:
             except IndexError:
                 return False
 
+            # Compare first letter to expected/allowed letters of page.
+            if (
+                len(parts) == 1
+                and not parts[0][0].upper() in self.get_letters_in_page()
+            ):
+                return False
+
+            # Check if first words ends like entries should.
             return len(parts) == 1 and parts[0][-1] in [",", "-"]
 
         raw_entries = ["\n".join(self.content)]
@@ -138,7 +146,9 @@ class Page:
 
         # Format string entries to structures.
         entries = [
-            Entry.from_raw_entry(raw_entry)
+            Entry.from_raw_entry(
+                raw_entry=raw_entry, allowed_start_letters=self.get_letters_in_page()
+            )
             for raw_entry in raw_entries
             # Some lines are either empty, or consists of title letter, or consist of linebreaks.
             # Drop them from entry parsing.

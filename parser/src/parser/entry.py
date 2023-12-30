@@ -71,7 +71,14 @@ class Entry(NamedTuple):
         return KNOWN_HEADWORD_TYPOS_TO_CORRECT_VERSIONS.get(raw_headword, raw_headword)
 
     @classmethod
-    def _clean_headword_presentation(cls, raw_headword: str) -> str:
+    def _clean_headword_presentation(
+        cls, raw_headword: str, allowed_start_letters: list[str]
+    ) -> str:
+        # Only process words starting with one of the expected letters.
+        # Occasionally non-entry may look just like one.
+        if raw_headword[0] not in allowed_start_letters:
+            return raw_headword
+
         formatted_headword = raw_headword
 
         # Drop ending commas when present.
@@ -85,7 +92,9 @@ class Entry(NamedTuple):
         return cls._proofread_headword(formatted_headword)
 
     @classmethod
-    def from_raw_entry(cls, raw_entry: str) -> "Entry":
+    def from_raw_entry(
+        cls, raw_entry: str, allowed_start_letters: list[str]
+    ) -> "Entry":
         # Naive expectation: first word is headword.
         parts = raw_entry.split(" ", maxsplit=1)
         status = EntryStatus.VALID
@@ -93,12 +102,13 @@ class Entry(NamedTuple):
         headword = cls._clean_headword(parts[0])
         definitions = cls._clean_definitions(parts[1])
 
-        # Headwords are expected to end in comma.
+        # Headwords are expected to end in comma or dash.
+        # They should also start with one of the expected letters.
         if (
             len(headword) > 0
             and headword[-1] not in [",", "-"]
             and headword not in EXCEPTIONS_TO_COMMA_RULE
-        ):
+        ) or headword[0] not in allowed_start_letters:
             status = EntryStatus.PART_OF_PREVIOUS_ENTRY
 
         # Headwords with line breaks end in dash.
@@ -108,7 +118,7 @@ class Entry(NamedTuple):
             definitions = " ".join(definitions.split(" ")[1:])
 
         return Entry(
-            headword=cls._clean_headword_presentation(headword),
+            headword=cls._clean_headword_presentation(headword, allowed_start_letters),
             definitions=definitions,
             status=status,
         )

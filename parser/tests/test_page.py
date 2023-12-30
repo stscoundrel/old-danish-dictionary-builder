@@ -132,7 +132,7 @@ def test_parses_simple_entries_from_irregular_offset_page() -> None:
     entries = page.get_entries()
 
     expected_headwords = [
-        "Dég",  # TODO: GH-56 incorrect entry detection.
+        "dég,",
         "Arbejdelse",
         "Axbørst",
         "Ardag",
@@ -147,7 +147,7 @@ def test_parses_simple_entries_from_irregular_offset_page() -> None:
     ]
 
     expected_statuses = [
-        EntryStatus.VALID,  # TODO: GH-56 incorrect entry detection.
+        EntryStatus.PART_OF_PREVIOUS_ENTRY,
         EntryStatus.VALID,
         EntryStatus.VALID,
         EntryStatus.VALID,
