@@ -51,9 +51,8 @@ def test_page_letters_meta() -> None:
     assert page2.get_letters_in_page() == ["A"]
     assert page3.get_letters_in_page() == ["J", "K"]
     assert page4.get_letters_in_page() == [
-        "A",
-        "Å",
-    ]  # TODO GH-55: incorrect OCR for second letter. Should be detected, as å shouldn't come after a.
+        "A"
+    ]  # Note: OCR would claim "A & Å", should be detected.
 
 
 def test_parses_simple_entries() -> None:
@@ -142,12 +141,13 @@ def test_parses_simple_entries_from_irregular_offset_page() -> None:
         "Areld",
         "Areldsæd",
         "Arene",
-        # TODO: should have. "Arfbidt". Probably due to GH-55
+        "Arfbidt",
         "Arg",
     ]
 
     expected_statuses = [
         EntryStatus.PART_OF_PREVIOUS_ENTRY,
+        EntryStatus.VALID,
         EntryStatus.VALID,
         EntryStatus.VALID,
         EntryStatus.VALID,
