@@ -2,6 +2,7 @@ import re
 from typing import Final
 
 from src.parser.entry import Entry
+from src.parser.utils.alphabet import is_before_in_alphabet, letters_are_sequantial
 
 METALINE_ENTRY_SEPARATOR: Final[str] = "—"
 
@@ -86,7 +87,23 @@ class Page:
                 letters.add(self._get_meta_parts()[0][0].upper())
                 letters.add(self._get_meta_parts()[1][0].upper())
 
-            self._letters_in_page = sorted(list(letters))
+            letters_list = sorted(list(letters))
+
+            if len(letters) > 1 and letters_list[0] != letters_list[1]:
+                first_letter = letters_list[0]
+                second_letter = letters_list[1]
+                # Sanity checks: letters may be incorrectly read via OCR.
+                # - Letters are not more-or-less sequential.
+                # - Check if first letter is alphabetically before latter
+                # TODO: if this simplified logic starts failing,
+                # we could use initial letter name from filename too.
+                if not letters_are_sequantial(
+                    first_letter, second_letter
+                ) or is_before_in_alphabet(second_letter, first_letter):
+                    # Default to using first letter for all.
+                    letters_list = [first_letter]
+
+            self._letters_in_page = letters_list
 
         return self._letters_in_page
 
