@@ -162,3 +162,50 @@ def test_parses_simple_entries_from_irregular_offset_page() -> None:
 
     assert [entry.headword for entry in entries] == expected_headwords
     assert [entry.status for entry in entries] == expected_statuses
+
+
+def test_parses_entries_from_first_page() -> None:
+    """
+    First page in dictionary portrays many irregularities in OCR, which makes detecting
+    entries trickier. Includes manual exception for Abeganteri.
+    """
+    irregular_lines_input = _single_column_test_file(
+        file="first-page.txt",
+        name="0-abbot.txt",
+    )
+
+    page = Page(lines=irregular_lines_input)
+    entries = page.get_entries()
+
+    expected_headwords = [
+        "Åbbot,",
+        "Abbeddømme",
+        "Abbatisse",
+        "Abe",
+        "Abears",
+        "Abefugl",
+        "Abegabe",
+        "Abegant",
+        "Abeganteri",
+        "Aberøv",
+        "Abespil",
+        "Abe",
+    ]
+
+    expected_statuses = [
+        EntryStatus.PART_OF_PREVIOUS_ENTRY,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+    ]
+
+    assert [entry.headword for entry in entries] == expected_headwords
+    assert [entry.status for entry in entries] == expected_statuses
