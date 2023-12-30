@@ -8,6 +8,10 @@ KNOWN_HEADWORD_TYPOS_TO_CORRECT_VERSIONS: Final[dict[str, str]] = {
     "Ya(eyfærdig": "Yd(e)færdig",
 }
 
+KNOWN_HEADWORD_OCR_SPLIT_ISSUES_TO_CORRECTLY_SPlIT: Final[
+    dict[str, tuple[str, str]]
+] = {"Abeganterino.narreverk.": ("Abeganteri", "no. narreverk. Moth.")}
+
 EXCEPTIONS_TO_COMMA_RULE: Final[list[str]] = ["X"]
 
 
@@ -91,6 +95,14 @@ class Entry(NamedTuple):
         # Fix known typos.
         return cls._proofread_headword(formatted_headword)
 
+    @staticmethod
+    def _maybe_replace_headword_or_content(
+        headword: str, definitions: str
+    ) -> tuple[str, str]:
+        return KNOWN_HEADWORD_OCR_SPLIT_ISSUES_TO_CORRECTLY_SPlIT.get(
+            headword, (headword, definitions)
+        )
+
     @classmethod
     def from_raw_entry(
         cls, raw_entry: str, allowed_start_letters: list[str]
@@ -116,6 +128,10 @@ class Entry(NamedTuple):
         if len(headword) > 0 and headword[-1] == "-":
             headword = f"{headword[0:-1]}{definitions.split(' ')[0]}"
             definitions = " ".join(definitions.split(" ")[1:])
+
+        headword, definitions = cls._maybe_replace_headword_or_content(
+            headword, definitions
+        )
 
         return Entry(
             headword=cls._clean_headword_presentation(headword, allowed_start_letters),
