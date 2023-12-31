@@ -167,7 +167,7 @@ def test_parses_simple_entries_from_irregular_offset_page() -> None:
 def test_parses_entries_from_first_page() -> None:
     """
     First page in dictionary portrays many irregularities in OCR, which makes detecting
-    entries trickier. Includes manual exception for Abeganteri.
+    entries trickier. Includes manual exception for Abeganteri & letter fixing for Abbot.
     """
     irregular_lines_input = _single_column_test_file(
         file="first-page.txt",
@@ -178,7 +178,7 @@ def test_parses_entries_from_first_page() -> None:
     entries = page.get_entries()
 
     expected_headwords = [
-        "Åbbot,",
+        "Abbot",
         "Abbeddømme",
         "Abbatisse",
         "Abe",
@@ -193,7 +193,7 @@ def test_parses_entries_from_first_page() -> None:
     ]
 
     expected_statuses = [
-        EntryStatus.PART_OF_PREVIOUS_ENTRY,
+        EntryStatus.VALID,
         EntryStatus.VALID,
         EntryStatus.VALID,
         EntryStatus.VALID,

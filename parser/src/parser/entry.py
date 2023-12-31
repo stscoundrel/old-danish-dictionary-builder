@@ -76,14 +76,23 @@ class Entry(NamedTuple):
 
     @classmethod
     def _clean_headword_presentation(
-        cls, raw_headword: str, allowed_start_letters: list[str]
+        cls,
+        raw_headword: str,
+        allowed_start_letters: list[str],
+        known_incorrect_letters: list[str],
     ) -> str:
+        formatted_headword = raw_headword
+
+        if raw_headword[0] in known_incorrect_letters:
+            # We can expect headwords first letter is read incorrectly.
+            # Replace it with first known one. While it sounds haphazard,
+            # at this point parsing anyway expects there is truly only one letter in page.
+            formatted_headword = allowed_start_letters[0] + formatted_headword[1:]
+
         # Only process words starting with one of the expected letters.
         # Occasionally non-entry may look just like one.
-        if raw_headword[0] not in allowed_start_letters:
-            return raw_headword
-
-        formatted_headword = raw_headword
+        if formatted_headword[0] not in allowed_start_letters:
+            return formatted_headword
 
         # Drop ending commas when present.
         if len(raw_headword) > 0 and raw_headword[-1] == ",":
@@ -105,7 +114,10 @@ class Entry(NamedTuple):
 
     @classmethod
     def from_raw_entry(
-        cls, raw_entry: str, allowed_start_letters: list[str]
+        cls,
+        raw_entry: str,
+        allowed_start_letters: list[str],
+        known_incorrect_letters: list[str],
     ) -> "Entry":
         # Naive expectation: first word is headword.
         parts = raw_entry.split(" ", maxsplit=1)
@@ -120,7 +132,7 @@ class Entry(NamedTuple):
             len(headword) > 0
             and headword[-1] not in [",", "-"]
             and headword not in EXCEPTIONS_TO_COMMA_RULE
-        ) or headword[0] not in allowed_start_letters:
+        ) or headword[0] not in allowed_start_letters + known_incorrect_letters:
             status = EntryStatus.PART_OF_PREVIOUS_ENTRY
 
         # Headwords with line breaks end in dash.
@@ -134,7 +146,9 @@ class Entry(NamedTuple):
         )
 
         return Entry(
-            headword=cls._clean_headword_presentation(headword, allowed_start_letters),
+            headword=cls._clean_headword_presentation(
+                headword, allowed_start_letters, known_incorrect_letters
+            ),
             definitions=definitions,
             status=status,
         )

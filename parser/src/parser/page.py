@@ -10,6 +10,7 @@ METALINE_ENTRY_SEPARATOR: Final[str] = "—"
 class Page:
     _meta_parts: list[str] | None = None
     _letters_in_page: list[str] | None = None
+    _incorrect_letters_in_page: list[str] = []
 
     def __init__(self, lines: list[str]) -> None:
         # While pages have irregular meta lines, column parsing should've offsetted it already.
@@ -100,6 +101,10 @@ class Page:
                 if not letters_are_sequantial(
                     first_letter, second_letter
                 ) or is_before_in_alphabet(second_letter, first_letter):
+                    # Preserve incorrect letters -> they might be used to
+                    # detect & fix malformatted headwords.
+                    self._incorrect_letters_in_page.append(second_letter)
+
                     # Default to using first letter for all.
                     letters_list = [first_letter]
 
@@ -164,7 +169,9 @@ class Page:
         # Format string entries to structures.
         entries = [
             Entry.from_raw_entry(
-                raw_entry=raw_entry, allowed_start_letters=self.get_letters_in_page()
+                raw_entry=raw_entry,
+                allowed_start_letters=self.get_letters_in_page(),
+                known_incorrect_letters=self._incorrect_letters_in_page,
             )
             for raw_entry in raw_entries
             # Some lines are either empty, or consists of title letter, or consist of linebreaks.
