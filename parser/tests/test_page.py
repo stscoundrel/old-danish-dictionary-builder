@@ -42,10 +42,37 @@ def test_page_letters_meta() -> None:
         name="71-arbejdelse.txt",  # Exception by name!
     )
 
+    # These are all problematically read by OCR & should have special handling.
+    irregular_number_words_number = _single_column_test_file(
+        file="irregular-meta-number-words-number.txt",
+        name="1138-husbrand.txt",
+    )
+    irregular_three_words = _single_column_test_file(
+        file="irregular-meta-three-words.txt",
+        name="1233-indermere (inderst).txt",
+    )
+    irregular_sign_words_number = _single_column_test_file(
+        file="irregular-meta-sign-words-number.txt",
+        name="1549-kølve.txt",
+    )
+    irregular_undexpected_dash = _single_column_test_file(
+        file="irregular-meta-unexpected-dash.txt",
+        name="2523-skinbarlig.txt",
+    )
+    irregular_undexpected_spacing = _single_column_test_file(
+        file="irregular-meta-unexpected-spacing.txt",
+        name="2530-skjudebane.txt",
+    )
+
     page1 = Page(lines=one_letter_left_page_input)
     page2 = Page(lines=one_letter_right_page_input)
     page3 = Page(lines=two_letters_right_page_input)
     page4 = Page(lines=one_letter_irregular_meta_input)
+    page5 = Page(lines=irregular_number_words_number)
+    page6 = Page(lines=irregular_three_words)
+    page7 = Page(lines=irregular_sign_words_number)
+    page8 = Page(lines=irregular_undexpected_dash)
+    page9 = Page(lines=irregular_undexpected_spacing)
 
     assert page1.get_letters_in_page() == ["A"]
     assert page2.get_letters_in_page() == ["A"]
@@ -53,6 +80,11 @@ def test_page_letters_meta() -> None:
     assert page4.get_letters_in_page() == [
         "A"
     ]  # Note: OCR would claim "A & Å", should be detected.
+    assert page5.get_letters_in_page() == ["H"]
+    assert page6.get_letters_in_page() == ["I"]
+    assert page7.get_letters_in_page() == ["K"]
+    assert page8.get_letters_in_page() == ["S"]
+    assert page9.get_letters_in_page() == ["S"]
 
 
 def test_parses_simple_entries() -> None:
