@@ -27,6 +27,25 @@ class Page:
                 if splitted != ""
             ]
 
+            # If we're dealing with larger-than-expected number of meta-parts,
+            # we should drop one letter parts. They're generally incorrectly read
+            # if they appear in those amounts.
+            if len(self._meta_parts) > 3:
+                self._meta_parts = [part for part in self._meta_parts if len(part) > 1]
+
+            # Should we have part in parenthesis or with unexpected dash,
+            # embed it to the previous part.
+            combined_parts: list[str] = []
+            for idx, part in enumerate(self._meta_parts):
+                if part[0] == "(" and part[-1] == ")":
+                    combined_parts[idx - 1] = f"{combined_parts[idx-1]} {part}"
+                elif part[0] == "—":
+                    combined_parts[idx - 1] = f"{combined_parts[idx-1]}{part}"
+                else:
+                    combined_parts.append(part)
+
+            self._meta_parts = combined_parts
+
             # We generally expect to get three parts: page number, first entry, last entry.
             # (or reverse for other side pages)
             # However, occasionally entries are dashed together. Try to separate them.
