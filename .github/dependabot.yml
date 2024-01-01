@@ -6,9 +6,9 @@ updates:
       interval: monthly
     open-pull-requests-limit: 25
     groups:
-       maven-dependencies:
-          patterns:
-            - "*"
+      maven-dependencies:
+        patterns:
+          - "*"
 
   - package-ecosystem: npm
     directory: "/image-to-text"
@@ -16,9 +16,9 @@ updates:
       interval: monthly
     open-pull-requests-limit: 25
     groups:
-       npm-dependencies:
-          patterns:
-            - "*"
+      npm-dependencies:
+        patterns:
+          - "*"
 
   - package-ecosystem: pip
     directory: "/parser"
@@ -26,10 +26,14 @@ updates:
       interval: monthly
     open-pull-requests-limit: 25
     groups:
-       dependencies:
-          patterns:
-            - "*"
+      dependencies:
+        patterns:
+          - "*"
 
+  - package-ecosystem: "pub"
+    directory: "/image-rotator"
+    schedule:
+      interval: monthly
 
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -37,6 +41,6 @@ updates:
       interval: monthly
     open-pull-requests-limit: 25
     groups:
-       ci-dependencies:
-          patterns:
-            - "*"
+      ci-dependencies:
+        patterns:
+          - "*"
