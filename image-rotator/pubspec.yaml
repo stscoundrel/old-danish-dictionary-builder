@@ -1,0 +1,14 @@
+name: image_rotator
+description: Rotates images to ensure better OCR results for skewed pages.
+version: 0.1.0
+repository: https://github.com/stscoundrel/old-danish-dictionary-builder
+
+environment:
+  sdk: ^3.1.5
+
+dependencies:
+  image: ^3.0.1
+
+dev_dependencies:
+  lints: ^2.0.0
+  test: ^1.21.0

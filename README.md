@@ -22,7 +22,17 @@ To run the scraper script:
 
 Images will be downloaded to `scraper/resources/images` folder.
 
-### 2. Run OCR to turn images to text
+### 2. Run script to rotate pages
+
+Some pages are too skewed in their scan to provide reliable OCR results. We need to rotate problematic ones first.
+
+Setup Dart. Move files to be rotated to `image-rotator/resources/images`. There is mapping of files needing rotation in `image-rotator/bin/image_rotator.dart`
+
+To run the rotator script:
+
+`dart run`
+
+### 3. Run OCR to turn images to text
 
 Setup Node.js 20+ (eg. via NVM) & run `npm/yarn install` inside the `image-to-text` subfolder.
 
