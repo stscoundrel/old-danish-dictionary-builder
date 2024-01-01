@@ -6,10 +6,11 @@ Currently work-in-progress, but the goal is to offer JSON dataset with normalize
 
 ## Current features:
 - Downloads all scanned pages.
+- Rotates images that are too skewed for good ORC results.
 - Feeds images to image-to-text (OCR) library.
 
 ## Upcoming features
-- Parse ORC results to machine-readable structured formats.
+- Parse ORC results to machine-readable structured formats. Active work in progress.
 
 
 ### 1. Run scraper to download page images.
