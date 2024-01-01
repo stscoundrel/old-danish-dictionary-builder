@@ -49,16 +49,13 @@ class Page:
             # We generally expect to get three parts: page number, first entry, last entry.
             # (or reverse for other side pages)
             # However, occasionally entries are dashed together. Try to separate them.
-            if len(self._meta_parts) == 2:
+            parts_to_check = [part for part in self._meta_parts if len(part) > 1]
+            if len(parts_to_check) == 2:
                 number_part = (
-                    self._meta_parts[0]
-                    if self.is_left_side_page()
-                    else self._meta_parts[1]
+                    parts_to_check[0] if self.is_left_side_page() else parts_to_check[1]
                 )
                 words_part = (
-                    self._meta_parts[1]
-                    if self.is_left_side_page()
-                    else self._meta_parts[0]
+                    parts_to_check[1] if self.is_left_side_page() else parts_to_check[0]
                 )
 
                 if METALINE_ENTRY_SEPARATOR in words_part:
@@ -69,6 +66,11 @@ class Page:
                         else [*split_words, number_part]
                     )
                     self._meta_parts = formatted_meta_parts
+
+        # Another round of cleanup for excessive parts, should they _still_ exist.
+        # It is possible if page contained glued-together parts which have since been separated.
+        if len(self._meta_parts) > 3:
+            self._meta_parts = [part for part in self._meta_parts if len(part) > 1]
 
         return self._meta_parts
 
@@ -86,6 +88,19 @@ class Page:
         }
 
     def is_left_side_page(self) -> bool:
+        first_part_is_numeric = self._get_meta_parts()[0].isnumeric()
+        last_part_is_numeric = self._get_meta_parts()[-1].isnumeric()
+
+        if first_part_is_numeric and last_part_is_numeric:
+            # Favor the one with larger number, applies to most cases.
+            first_number = int(self._get_meta_parts()[0])
+            second_number = int(self._get_meta_parts()[-1])
+
+            if first_number > second_number:
+                return True
+
+            return False
+
         return self._get_meta_parts()[0].isnumeric()
 
     def is_right_side_page(self) -> bool:

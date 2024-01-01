@@ -174,3 +174,59 @@ def test_splits_page_of_numbers_in_column_separators() -> None:
     ]
 
     assert [entry.headword for entry in y_entries] == expected_y_headwords
+
+
+def test_splits_page_with_irregular_meta_line() -> None:
+    """
+    This page has irregular meta line + words are incorrectly OCR'd together,
+    making standard letter detection tricky.
+    """
+
+    g_to_h = open_test_file("irregular-meta-split-page.txt")
+
+    page_g, page_h = PageSplitter.split_page("962-gørrel.txt", g_to_h)
+
+    # Page side should be shared between the split siblings.
+    assert page_g.is_right_side_page() is True
+    assert page_h.is_right_side_page() is True
+
+    # Pages should have separated available letters.
+    assert page_g.get_letters_in_page() == ["G"]
+    assert page_h.get_letters_in_page() == ["H"]
+
+    # Pages should have expected amounts of entries.
+    g_entries = page_g.get_entries()
+    h_entries = page_h.get_entries()
+    assert len(g_entries) == 9
+    assert len(h_entries) == 3
+
+    expected_g_headwords = [
+        "Gørrel",
+        "Gørle",
+        "Gørrelvand",
+        "Gørsom",
+        "Gørtel",
+        "Gøtøle",
+        "Gøttersk",
+        "Gøttigsk",
+        "Gøvling",
+    ]
+
+    expected_h_headwords = [
+        "Had",
+        "Hesiodus",  # TODO: GH-67 false positive, part of previous.
+        "Højsgaard",  # TODO: GH-67 false positive, part of previous.
+    ]
+
+    assert [entry.headword for entry in g_entries] == expected_g_headwords
+    assert [entry.headword for entry in h_entries] == expected_h_headwords
+
+    # TODO: GH-68: trim "—" and/or "" —" from ends of definitions.
+    assert g_entries[0].definitions == "no. svælg. Moth. Smlgn.1.surgel. —"
+    assert g_entries[1].definitions == "go. skylle hals. en. Moth. —"
+    assert g_entries[2].definitions == "no. vand Ul at skylle halsen med, Moth"
+    assert g_entries[4].definitions == "se u. gjord."
+    assert g_entries[-1].definitions == (
+        "no. kvist; forgyldte taarne-flag nu kugle-smelted dratter, bruun-blan-glassered steen "
+        "fra goflingenedstator (1075). Stolpe, Daxs- pressen i Dmrk. IL 82. Smlen. Molb. Diall: giævling."
+    )
