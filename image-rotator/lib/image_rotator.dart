@@ -10,7 +10,7 @@ Future<void> rotateImage(
 
     if (image != null) {
       // Rotate the image
-      final rotatedImage = img.copyRotate(image, rotationDegrees);
+      final rotatedImage = img.copyRotate(image, angle: rotationDegrees);
 
       // Save the rotated image to a new file
       await File(outputFilePath).writeAsBytes(img.encodeGif(rotatedImage));
