@@ -4,6 +4,11 @@ from typing import Final, NamedTuple
 KNOWN_HEADWORD_TYPOS_TO_CORRECT_VERSIONS: Final[dict[str, str]] = {
     "Azelkøbstad": "Axelkøbstad",
     "Azelvej": "Axelvej",
+    "Bandebrev": "Bandsbrev",
+    "Bolstyrighed": "Balstyrighed",
+    "Hav": "Hov",
+    "Hovskræpps": "Hovskræppe",
+    "Hovslag": "Hovalag",
     "Sebbet": "Sabbat",
     "Ya(eyfærdig": "Yd(e)færdig",
 }

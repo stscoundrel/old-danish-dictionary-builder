@@ -241,3 +241,105 @@ def test_parses_entries_from_first_page() -> None:
 
     assert [entry.headword for entry in entries] == expected_headwords
     assert [entry.status for entry in entries] == expected_statuses
+
+
+def test_parses_rotated_and_re_ocrd_page() -> None:
+    """
+    Some page scans/images are so skewed that they need to be run through rotator
+    to turn them into pages that can be read automatically. Test one of those cases.
+    """
+    manipulated_input1 = _single_column_test_file(
+        file="simple-page-rotated-for-better-ocr.txt",
+        name="97-balstyrig.txt",
+    )
+    manipulated_input2 = _single_column_test_file(
+        file="simple-page-rotated-for-better-ocr2.txt",
+        name="1109-hosskrift.txt",
+    )
+
+    page1 = Page(lines=manipulated_input1)
+    page2 = Page(lines=manipulated_input2)
+
+    assert page1.is_left_side_page() is True
+    assert page2.is_left_side_page() is True
+
+    entries1 = page1.get_entries()
+    entries2 = page2.get_entries()
+
+    expected_headwords1 = [
+        "mellem",
+        "Balstyrig",
+        "Balstyrighed",
+        "Bambe",
+        "Bammende",
+        "Bamsing",
+        "Band",
+        "Band",
+        "Bandsbrev",
+        # TODO: should have "Bandsdag"
+        "Bandsfolk",
+        "Bandføre",
+    ]
+
+    expected_statuses1 = [
+        EntryStatus.PART_OF_PREVIOUS_ENTRY,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+    ]
+
+    assert [entry.headword for entry in entries1] == expected_headwords1
+    assert [entry.status for entry in entries1] == expected_statuses1
+
+    expected_headwords2 = [
+        "hoss",
+        "Hosskrift",
+        "Hosskrive",
+        "Hoslåer",
+        "Hossætte",
+        "Hoste",
+        "Hosstændig",
+        "Hosvære",
+        "Høsværelse",
+        "Hourt",
+        "Hov",
+        "Hov",
+        "Hovbar",
+        "Hovblad",
+        "Hovskræppe",
+        "Hovalag",
+        # TODO: Should have "Hovslager", but would need more tricky regex to detect it.
+        "Hibertz",  # TODO: GH-67, part of previous entry.
+        "Hovsmed",
+    ]
+
+    expected_statuses2 = [
+        EntryStatus.PART_OF_PREVIOUS_ENTRY,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+    ]
+
+    assert [entry.headword for entry in entries2] == expected_headwords2
+    assert [entry.status for entry in entries2] == expected_statuses2
