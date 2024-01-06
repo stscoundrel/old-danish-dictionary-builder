@@ -20,7 +20,8 @@
     "prettier": "^3.1.1"
   },
   "scripts": {
-    "images-to-text": "ts-node src/app.ts",
+    "images-to-text": "ts-node src/read-all-images.ts",
+    "rotated-images-to-text": "ts-node src/read-rotated-images.ts",
     "lint": "prettier src --check",
     "fix": "prettier src --write"
   }
