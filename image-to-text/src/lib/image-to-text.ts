@@ -2,8 +2,8 @@ import * as fs from "fs";
 import Tesseract from "tesseract.js";
 import { chunkArray } from "skilja";
 
-const inputPath = "./resources/images";
-const outputPath = "./resources/text";
+export const inputPath = "./resources/images";
+export const outputPath = "./resources/text";
 
 const WORKERS_COUNT = 6;
 const BATCH_SIZE = 30;
@@ -30,17 +30,19 @@ const getScheduler = async (): Promise<Tesseract.Scheduler> => {
   return scheduler;
 };
 
-async function processImages() {
+export async function processImages(
+  imageFiles: string[],
+  inputLocation: string,
+  outputLocation: string,
+) {
   try {
-    const allFiles = await fs.promises.readdir(inputPath);
-    const imageFiles = allFiles.filter((file) => file.endsWith(".gif"));
     const batches: string[][] = chunkArray(imageFiles, BATCH_SIZE);
     const scheduler = await getScheduler();
 
-    for (let i = 0; i <= batches.length; i += 1) {
+    for (let i = 0; i < batches.length; i += 1) {
       // Read images.
       const imageProcessingPromises = batches[i].map(async (file) => {
-        const imagePath = `${inputPath}/${file}`;
+        const imagePath = `${inputLocation}/${file}`;
 
         // Perform OCR on the current image
         const {
@@ -64,7 +66,7 @@ async function processImages() {
 
       // Store results as text.
       const fileSavePromises = imageResults.map(async ([fileName, text]) => {
-        const outputFilePath = `${outputPath}/${fileName}.txt`.replace(
+        const outputFilePath = `${outputLocation}/${fileName}.txt`.replace(
           ".gif",
           "",
         );
@@ -84,4 +86,4 @@ async function processImages() {
   }
 }
 
-processImages();
+export default {};
