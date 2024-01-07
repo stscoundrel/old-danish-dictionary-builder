@@ -53,13 +53,12 @@ class PageSplitter:
         letters = page1.get_letters_in_page()
         assert len(letters) <= 2
 
-        # Should there only be one letter, the metaline is incorrect. For example, page E - F.
-        # In that case, it is safe enough to expect that the first is incorrect & should be the
-        # previous letter of the alphabet. May later need custom mapping if more complex cases appear.
+        # Should there only be one letter, the metaline is incorrect.
+        # It is irregular enough, so lets just fetch correct ones via mapping.
         if len(letters) == 1:
-            letters = [cls._get_previous_letter_of_dictionary(letters[0]), letters[0]]
+            letters = cls._get_letters_for_filename(filename)
 
-        assert len(letters) == 2
+        assert len(letters) == 2, f"Missing letters for {filename}"
 
         # Inject letters to correct pages, indicating both are not available in both.
         page1.set_letters_in_page([letters[0]])
@@ -68,13 +67,15 @@ class PageSplitter:
         return page1, page2
 
     @staticmethod
-    def _get_previous_letter_of_dictionary(letter: str) -> str:
-        # TODO: actual logic if needed. Currently only covers
-        # special-case-by-special-case.
-        if letter == "F":
-            return "E"
-
-        if letter == "Y":
-            return "V"
-
-        raise NotImplementedError(f"No handling for letter {letter}!")
+    def _get_letters_for_filename(filename: str) -> list[str]:
+        match filename:
+            case "1552-køterkro.txt":
+                return ["K", "L"]
+            case "484-fabel.txt":
+                return ["E", "F"]
+            case "3555-ybisk.txt":
+                return ["V", "Y"]
+            case "3554-vævel.txt":
+                return ["V", "X"]
+            case _:
+                raise NotImplementedError(f"No letters handling for {filename}!")

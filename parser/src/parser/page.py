@@ -37,9 +37,9 @@ class Page:
             # embed it to the previous part.
             combined_parts: list[str] = []
             for idx, part in enumerate(self._meta_parts):
-                if part[0] == "(" and part[-1] == ")":
+                if part[0] == "(" and part[-1] == ")" and len(combined_parts) > 0:
                     combined_parts[idx - 1] = f"{combined_parts[idx-1]} {part}"
-                elif part[0] == "—":
+                elif part[0] == "—" and len(combined_parts) > 1:
                     combined_parts[idx - 1] = f"{combined_parts[idx-1]}{part}"
                 else:
                     combined_parts.append(part)
@@ -106,25 +106,42 @@ class Page:
     def is_right_side_page(self) -> bool:
         return not self.is_left_side_page()
 
-    def get_letters_in_page(self) -> list[str]:
+    def get_letters_in_page(self) -> list[str]:  # noqa: C901
         """
         Page can generally have 1 or 2 start letters for headwords.
         Most common case: all headwords start with same letter.
         However: it can be split between end of first & start of second letter.
+
+        This is getting awfully complex with all the edge cases. May need to rethink the whole thing.
         """
         if not self._letters_in_page:
-            letters = set()
+            letters: set[str] = set()
+            parts = self._get_meta_parts()
+
             if self.is_left_side_page():
-                letters.add(self._get_meta_parts()[1][0].upper())
-                letters.add(self._get_meta_parts()[2][0].upper())
+                try:
+                    letters.add(parts[1][0].upper())
+                except IndexError:
+                    pass
+                try:
+                    letters.add(parts[2][0].upper())
+                except IndexError:
+                    pass
 
             if self.is_right_side_page():
-                letters.add(self._get_meta_parts()[0][0].upper())
-                letters.add(self._get_meta_parts()[1][0].upper())
+                try:
+                    letters.add(parts[0][0].upper())
+                except IndexError:
+                    pass
+                try:
+                    letters.add(parts[1][0].upper())
+                except IndexError:
+                    pass
 
-            letters_list = sorted(list(letters))
+            # Drop numbers, which may've been read from irregular meta lines.
+            letters_list = sorted([letter for letter in letters if letter.isalpha()])
 
-            if len(letters) > 1 and letters_list[0] != letters_list[1]:
+            if len(letters_list) > 1 and letters_list[0] != letters_list[1]:
                 first_letter = letters_list[0]
                 second_letter = letters_list[1]
                 # Sanity checks: letters may be incorrectly read via OCR.

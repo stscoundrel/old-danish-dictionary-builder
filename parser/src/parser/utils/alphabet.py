@@ -4,7 +4,7 @@ from typing import Final
 OLD_DANISH_ALPHABET: Final[str] = "abcdefghijklmnopqrstuvwxyzæøå"
 
 # Abridged alphabet for only comparing letters that may start headwords.
-HEADWORDS_ALPHABET: Final[str] = "abdefghijklmnoprstuvxyzæøå"
+HEADWORDS_ALPHABET: Final[str] = "abdefghijklmnoprstuvwxyzæøå"
 
 
 def is_after_in_alphabet(letter1: str, letter2: str) -> bool:
@@ -18,7 +18,10 @@ def is_before_in_alphabet(letter1: str, letter2: str) -> bool:
 
 
 def letters_are_sequantial(letter1: str, letter2: str) -> bool:
-    first_index = HEADWORDS_ALPHABET.index(letter1.lower())
-    second_index = HEADWORDS_ALPHABET.index(letter2.lower())
+    try:
+        first_index = HEADWORDS_ALPHABET.index(letter1.lower())
+        second_index = HEADWORDS_ALPHABET.index(letter2.lower())
+    except ValueError:
+        raise ValueError(f"No comparison found for letters: {letter1} & {letter2}")
 
     return abs(first_index - second_index) <= 1
