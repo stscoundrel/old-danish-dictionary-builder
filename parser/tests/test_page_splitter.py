@@ -136,11 +136,11 @@ def test_splits_page_of_numbers_in_column_separators() -> None:
     page_x, page_y = PageSplitter.split_page("3555-ybisk.txt", v_to_y)
 
     # Page side should be shared between the split siblings.
-    assert page_x.is_right_side_page() is True
-    assert page_y.is_right_side_page() is True
+    assert page_x.is_left_side_page() is True
+    assert page_y.is_left_side_page() is True
 
     # Pages should have separated available letters.
-    assert page_x.get_letters_in_page() == ["V"]
+    assert page_x.get_letters_in_page() == ["X"]
     assert page_y.get_letters_in_page() == ["Y"]
 
     # Pages should have expected amounts of entries.
@@ -250,8 +250,8 @@ def test_splits_page_with_letter_and_entry_expections() -> None:
     page_o, page_p = PageSplitter.split_page("2172-øxentorv.txt", o_to_p)
 
     # Page side should be shared between the split siblings.
-    assert page_o.is_left_side_page() is True
-    assert page_p.is_left_side_page() is True
+    assert page_o.is_right_side_page() is True
+    assert page_p.is_right_side_page() is True
 
     # Pages should have separated available letters.
     assert page_o.get_letters_in_page() == ["O"]

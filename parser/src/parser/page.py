@@ -2,77 +2,20 @@ import re
 from typing import Final
 
 from src.parser.entry import Entry
-from src.parser.utils.alphabet import is_before_in_alphabet, letters_are_sequantial
+from src.parser.page_meta import PageMeta
 
 METALINE_ENTRY_SEPARATOR: Final[str] = "—"
 
 
 class Page:
-    _meta_parts: list[str] | None = None
+    _page_number: int | None = None
     _letters_in_page: list[str] | None = None
-    _incorrect_letters_in_page: list[str] = []
 
-    def __init__(self, lines: list[str]) -> None:
+    def __init__(self, lines: list[str], name: str) -> None:
         # While pages have irregular meta lines, column parsing should've offsetted it already.
         self.meta = lines[0]
         self.content = lines[1:]
-
-    def _get_meta_parts(self) -> list[str]:
-        if self._meta_parts is None:
-            # Meta row often contains multitude of extra spaces.
-            # Just drop them from actual meta parts when splitting.
-            self._meta_parts = [
-                splitted.replace("\n", "")
-                for splitted in self.meta.split(" ")
-                if splitted != ""
-            ]
-
-            # If we're dealing with larger-than-expected number of meta-parts,
-            # we should drop one letter parts. They're generally incorrectly read
-            # if they appear in those amounts.
-            if len(self._meta_parts) > 3:
-                self._meta_parts = [part for part in self._meta_parts if len(part) > 1]
-
-            # Should we have part in parenthesis or with unexpected dash,
-            # embed it to the previous part.
-            combined_parts: list[str] = []
-            for idx, part in enumerate(self._meta_parts):
-                if part[0] == "(" and part[-1] == ")" and len(combined_parts) > 0:
-                    combined_parts[idx - 1] = f"{combined_parts[idx-1]} {part}"
-                elif part[0] == "—" and len(combined_parts) > 1:
-                    combined_parts[idx - 1] = f"{combined_parts[idx-1]}{part}"
-                else:
-                    combined_parts.append(part)
-
-            self._meta_parts = combined_parts
-
-            # We generally expect to get three parts: page number, first entry, last entry.
-            # (or reverse for other side pages)
-            # However, occasionally entries are dashed together. Try to separate them.
-            parts_to_check = [part for part in self._meta_parts if len(part) > 1]
-            if len(parts_to_check) == 2:
-                number_part = (
-                    parts_to_check[0] if self.is_left_side_page() else parts_to_check[1]
-                )
-                words_part = (
-                    parts_to_check[1] if self.is_left_side_page() else parts_to_check[0]
-                )
-
-                if METALINE_ENTRY_SEPARATOR in words_part:
-                    split_words = words_part.split(METALINE_ENTRY_SEPARATOR)
-                    formatted_meta_parts = (
-                        [number_part, *split_words]
-                        if self.is_left_side_page()
-                        else [*split_words, number_part]
-                    )
-                    self._meta_parts = formatted_meta_parts
-
-        # Another round of cleanup for excessive parts, should they _still_ exist.
-        # It is possible if page contained glued-together parts which have since been separated.
-        if len(self._meta_parts) > 3:
-            self._meta_parts = [part for part in self._meta_parts if len(part) > 1]
-
-        return self._meta_parts
+        self.name = name
 
     def get_separators_for(self, letter: str) -> list[str]:
         return [
@@ -87,21 +30,18 @@ class Page:
             for separator in self.get_separators_for(letter)
         }
 
+    def get_page_number(self) -> int:
+        if not self._page_number:
+            parts = self.name.split("-")
+            self._page_number = int(parts[0])
+
+        return self._page_number
+
     def is_left_side_page(self) -> bool:
-        first_part_is_numeric = self._get_meta_parts()[0].isnumeric()
-        last_part_is_numeric = self._get_meta_parts()[-1].isnumeric()
-
-        if first_part_is_numeric and last_part_is_numeric:
-            # Favor the one with larger number, applies to most cases.
-            first_number = int(self._get_meta_parts()[0])
-            second_number = int(self._get_meta_parts()[-1])
-
-            if first_number > second_number:
-                return True
-
+        if self.get_page_number() % 2 == 0:
             return False
 
-        return self._get_meta_parts()[0].isnumeric()
+        return True
 
     def is_right_side_page(self) -> bool:
         return not self.is_left_side_page()
@@ -111,55 +51,9 @@ class Page:
         Page can generally have 1 or 2 start letters for headwords.
         Most common case: all headwords start with same letter.
         However: it can be split between end of first & start of second letter.
-
-        This is getting awfully complex with all the edge cases. May need to rethink the whole thing.
         """
         if not self._letters_in_page:
-            letters: set[str] = set()
-            parts = self._get_meta_parts()
-
-            if self.is_left_side_page():
-                try:
-                    letters.add(parts[1][0].upper())
-                except IndexError:
-                    pass
-                try:
-                    letters.add(parts[2][0].upper())
-                except IndexError:
-                    pass
-
-            if self.is_right_side_page():
-                try:
-                    letters.add(parts[0][0].upper())
-                except IndexError:
-                    pass
-                try:
-                    letters.add(parts[1][0].upper())
-                except IndexError:
-                    pass
-
-            # Drop numbers, which may've been read from irregular meta lines.
-            letters_list = sorted([letter for letter in letters if letter.isalpha()])
-
-            if len(letters_list) > 1 and letters_list[0] != letters_list[1]:
-                first_letter = letters_list[0]
-                second_letter = letters_list[1]
-                # Sanity checks: letters may be incorrectly read via OCR.
-                # - Letters are not more-or-less sequential.
-                # - Check if first letter is alphabetically before latter
-                # TODO: if this simplified logic starts failing,
-                # we could use initial letter name from filename too.
-                if not letters_are_sequantial(
-                    first_letter, second_letter
-                ) or is_before_in_alphabet(second_letter, first_letter):
-                    # Preserve incorrect letters -> they might be used to
-                    # detect & fix malformatted headwords.
-                    self._incorrect_letters_in_page.append(second_letter)
-
-                    # Default to using first letter for all.
-                    letters_list = [first_letter]
-
-            self._letters_in_page = letters_list
+            self._letters_in_page = PageMeta.get_letters_for_page(self.name)
 
         return self._letters_in_page
 
@@ -190,9 +84,13 @@ class Page:
 
         raw_entries = ["\n".join(self.content)]
 
+        letters = self.get_letters_in_page()
+
+        assert (
+            len(letters) == 1
+        ), "Should only have one letter per page when parsing entries!"
+
         for letter in self.get_letters_in_page():
-            # TODO: GH-14 may need additional separators, perhaps based on
-            # the end of previous definition.
             separators_regex = "|".join(self.get_separators_for(letter))
 
             # Unsplit content should always be in the last entry.
@@ -222,7 +120,6 @@ class Page:
             Entry.from_raw_entry(
                 raw_entry=raw_entry,
                 allowed_start_letters=self.get_letters_in_page(),
-                known_incorrect_letters=self._incorrect_letters_in_page,
             )
             for raw_entry in raw_entries
             # Some lines are either empty, or consists of title letter, or consist of linebreaks.

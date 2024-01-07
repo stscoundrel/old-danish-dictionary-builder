@@ -1,6 +1,6 @@
 from typing import Final
 
-from src.parser.meta_line import MetaLine
+from src.parser.page_meta import PageMeta
 
 _vertical_divider: Final[str] = "|"
 _exlamation_divider: Final[str] = " ! "
@@ -54,7 +54,7 @@ def parse_column(page: list[str], name: str) -> list[str]:
     left_column = []
     right_column = []
 
-    meta_line_index = MetaLine.get_meta_line_index(name=name)
+    meta_line_index = PageMeta.get_meta_line_index(name=name)
     content_start_index = meta_line_index + 1  # Dont parse meta into columns.
 
     for line in page[content_start_index:]:
