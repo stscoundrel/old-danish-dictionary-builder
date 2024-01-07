@@ -236,3 +236,94 @@ def test_splits_page_with_irregular_meta_line() -> None:
         "no. kvist; forgyldte taarne-flag nu kugle-smelted dratter, bruun-blan-glassered steen "
         "fra goflingenedstator (1075). Stolpe, Daxs- pressen i Dmrk. IL 82. Smlen. Molb. Diall: giævling."
     )
+
+
+def test_splits_page_with_letter_and_entry_expections() -> None:
+    """
+    Essentially combination of other known cases:
+    - Meta line letters cant be parsed
+    - Entries starting letters have been misread by ORC. Should be proofread by entry handling.
+    """
+
+    o_to_p = open_test_file("split-o-to-p.txt")
+
+    page_o, page_p = PageSplitter.split_page("2172-øxentorv.txt", o_to_p)
+
+    # Page side should be shared between the split siblings.
+    assert page_o.is_left_side_page() is True
+    assert page_p.is_left_side_page() is True
+
+    # Pages should have separated available letters.
+    assert page_o.get_letters_in_page() == ["O"]
+    assert page_p.get_letters_in_page() == ["P"]
+
+    # Pages should have expected amounts of entries.
+    o_entries = page_o.get_entries()
+    p_entries = page_p.get_entries()
+    assert len(o_entries) == 6
+    assert len(p_entries) == 12
+
+    expected_o_headwords = ["Oxentorv", "Oxen", "Oxel", "Oxle", "Oya", "Oæfle"]
+
+    expected_p_headwords = [
+        "Pa",
+        "Pabret",
+        "Padde",
+        "Paddefod",
+        "Paddehat",
+        "Paddelegplaster",
+        "Paddepyt",
+        "Paddesten",
+        "Padel",
+        # TODO: Should have "Padre", but is OCR'd as "Fadre". Hard to detect.
+        "Padren",
+        # TODO: Should have "Padse". Has period instead of comma in OCR, hard to detect.
+        "Pagagi",
+        "Page",
+    ]
+
+    expected_o_statuses = [
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+    ]
+
+    expected_p_statuses = [
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+    ]
+
+    assert [entry.headword for entry in o_entries] == expected_o_headwords
+    assert [entry.headword for entry in p_entries] == expected_p_headwords
+    assert [entry.status for entry in o_entries] == expected_o_statuses
+    assert [entry.status for entry in p_entries] == expected_p_statuses
+
+    assert o_entries[0].definitions == "no. kvægtorv. Moth."
+    assert (
+        o_entries[1].definitions == "to. parrelysten, tyregal. Moth. Smlgu. isl. ysna."
+    )
+    assert o_entries[-1].definitions == (
+        "no. overmagt; ther ær icke skam at fly for oæfle, Romant, Digtn. I. 101.n. (Cl. Pedersen. "
+        "V. 69.30: offuer mackt). Smlgu. isl. ofrefti; gl. sv. oåtfle, se Såderwall: ofifle."
+    )
+
+    assert p_entries[0].definitions == "se på."
+    assert p_entries[7].definitions == (
+        "no. en art forstening; ComD $ 90 (ovf. II 483 3.23) = | bufonius,» i krotenstein. Navnene "
+        "skrive sig fra,at forsteningen mentes at danne sig i padders hoved, jf Rinm: paddsten; Nemn I. 710-11; "
+        "tudsesten udf. Over- troisk brug, jf Frisch L551a: kroten- stein."
+    )
+    assert p_entries[-1].definitions == "se paje."

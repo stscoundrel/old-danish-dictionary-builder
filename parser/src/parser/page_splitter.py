@@ -69,13 +69,15 @@ class PageSplitter:
     @staticmethod
     def _get_letters_for_filename(filename: str) -> list[str]:
         match filename:
-            case "1552-køterkro.txt":
-                return ["K", "L"]
             case "484-fabel.txt":
                 return ["E", "F"]
-            case "3555-ybisk.txt":
-                return ["V", "Y"]
+            case "1552-køterkro.txt":
+                return ["K", "L"]
+            case "2172-øxentorv.txt":
+                return ["O", "P"]
             case "3554-vævel.txt":
                 return ["V", "X"]
+            case "3555-ybisk.txt":
+                return ["V", "Y"]
             case _:
                 raise NotImplementedError(f"No letters handling for {filename}!")
