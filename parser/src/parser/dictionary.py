@@ -29,7 +29,8 @@ class Dictionary:
                     Page(
                         lines=columns.parse_column(
                             dictionary_page.lines, name=dictionary_page.name
-                        )
+                        ),
+                        name=dictionary_page.name,
                     )
                 )
 

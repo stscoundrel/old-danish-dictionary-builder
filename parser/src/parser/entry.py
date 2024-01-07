@@ -88,10 +88,22 @@ class Entry(NamedTuple):
         return cleaned_definitions
 
     @staticmethod
-    def _clean_headword(raw_headword: str) -> str:
+    def _clean_headword(raw_headword: str, allowed_start_letters: list[str]) -> str:
         # Drop linebreaks, headword may end in one even
         # though the headword is alreay complete.
-        return raw_headword.replace("\n", "").strip()
+        cleaned_headword = raw_headword.replace("\n", "").strip()
+
+        # If entry is capitalized & ends in comma, we'll expect first letter was read incorrectly.
+        # Replace it with known one. While it sounds haphazard,
+        # at this point parsing anyway expects there is truly only one letter in page.
+        if (
+            len(cleaned_headword) > 0
+            and cleaned_headword[0].isupper()
+            and cleaned_headword[-1] == ","
+        ):
+            cleaned_headword = allowed_start_letters[0] + cleaned_headword[1:]
+
+        return cleaned_headword
 
     @staticmethod
     def _proofread_headword(raw_headword: str) -> str:
@@ -106,15 +118,8 @@ class Entry(NamedTuple):
         cls,
         raw_headword: str,
         allowed_start_letters: list[str],
-        known_incorrect_letters: list[str],
     ) -> str:
         formatted_headword = raw_headword
-
-        if raw_headword[0] in known_incorrect_letters:
-            # We can expect headwords first letter is read incorrectly.
-            # Replace it with first known one. While it sounds haphazard,
-            # at this point parsing anyway expects there is truly only one letter in page.
-            formatted_headword = allowed_start_letters[0] + formatted_headword[1:]
 
         # Only process words starting with one of the expected letters.
         # Occasionally non-entry may look just like one.
@@ -144,13 +149,12 @@ class Entry(NamedTuple):
         cls,
         raw_entry: str,
         allowed_start_letters: list[str],
-        known_incorrect_letters: list[str],
     ) -> "Entry":
         # Naive expectation: first word is headword.
         parts = raw_entry.split(" ", maxsplit=1)
         status = EntryStatus.VALID
 
-        headword = cls._clean_headword(parts[0])
+        headword = cls._clean_headword(parts[0], allowed_start_letters)
         definitions = cls._clean_definitions(parts[1])
 
         # Headwords are expected to end in comma or dash.
@@ -159,7 +163,7 @@ class Entry(NamedTuple):
             if (
                 headword[-1] not in [",", "-"]
                 and headword not in EXCEPTIONS_TO_COMMA_RULE
-            ) or headword[0] not in allowed_start_letters + known_incorrect_letters:
+            ) or headword[0] not in allowed_start_letters:
                 status = EntryStatus.PART_OF_PREVIOUS_ENTRY
 
         # Headwords with line breaks end in dash.
@@ -176,9 +180,7 @@ class Entry(NamedTuple):
             status = EntryStatus.PART_OF_PREVIOUS_ENTRY
 
         return Entry(
-            headword=cls._clean_headword_presentation(
-                headword, allowed_start_letters, known_incorrect_letters
-            )
+            headword=cls._clean_headword_presentation(headword, allowed_start_letters)
             if (headword and status != EntryStatus.PART_OF_PREVIOUS_ENTRY)
             else headword,
             definitions=definitions,

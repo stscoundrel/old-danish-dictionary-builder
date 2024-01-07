@@ -11,14 +11,14 @@ def _single_column_test_file(file: str, name: str) -> list[str]:
 
 def test_page_side_meta() -> None:
     left_page_input = _single_column_test_file(
-        file="simple-page.txt", name="irrelevant-name"
+        file="simple-page.txt", name="19-afklappe.txt"
     )
     right_page_input = _single_column_test_file(
-        file="simple-page-linebreaks.txt", name="irrelevant-name"
+        file="simple-page-linebreaks.txt", name="20-afkyndige.txt"
     )
 
-    left_page = Page(lines=left_page_input)
-    right_page = Page(lines=right_page_input)
+    left_page = Page(lines=left_page_input, name="19-afklappe.txt")
+    right_page = Page(lines=right_page_input, name="20-afkyndige.txt")
 
     assert left_page.is_left_side_page() is True
     assert right_page.is_right_side_page() is True
@@ -29,7 +29,7 @@ def test_page_side_meta() -> None:
 
 def test_page_letters_meta() -> None:
     one_letter_left_page_input = _single_column_test_file(
-        file="simple-page.txt", name="irrelevant-name"
+        file="simple-page.txt", name="19-afklappe.txt"
     )
     one_letter_right_page_input = _single_column_test_file(
         file="simple-page-linebreaks.txt", name="irrelevant-name"
@@ -64,15 +64,15 @@ def test_page_letters_meta() -> None:
         name="2530-skjudebane.txt",
     )
 
-    page1 = Page(lines=one_letter_left_page_input)
-    page2 = Page(lines=one_letter_right_page_input)
-    page3 = Page(lines=two_letters_right_page_input)
-    page4 = Page(lines=one_letter_irregular_meta_input)
-    page5 = Page(lines=irregular_number_words_number)
-    page6 = Page(lines=irregular_three_words)
-    page7 = Page(lines=irregular_sign_words_number)
-    page8 = Page(lines=irregular_undexpected_dash)
-    page9 = Page(lines=irregular_undexpected_spacing)
+    page1 = Page(lines=one_letter_left_page_input, name="19-afklappe.txt")
+    page2 = Page(lines=one_letter_right_page_input, name="20-afkyndige.txt")
+    page3 = Page(lines=two_letters_right_page_input, name="1300-jødetempel.txt")
+    page4 = Page(lines=one_letter_irregular_meta_input, name="71-arbejdelse.txt")
+    page5 = Page(lines=irregular_number_words_number, name="1138-husbrand.txt")
+    page6 = Page(lines=irregular_three_words, name="1233-indermere (inderst).txt")
+    page7 = Page(lines=irregular_sign_words_number, name="1549-kølve.txt")
+    page8 = Page(lines=irregular_undexpected_dash, name="2523-skinbarlig.txt")
+    page9 = Page(lines=irregular_undexpected_spacing, name="2530-skjudebane.txt")
 
     assert page1.get_letters_in_page() == ["A"]
     assert page2.get_letters_in_page() == ["A"]
@@ -95,7 +95,7 @@ def test_parses_simple_entries() -> None:
         file="simple-page.txt", name="irrelevant-name"
     )
 
-    page = Page(lines=one_letter_left_page_input)
+    page = Page(lines=one_letter_left_page_input, name="19-afklappe.txt")
     entries = page.get_entries()
 
     expected_headwords = [
@@ -159,7 +159,7 @@ def test_parses_simple_entries_from_irregular_offset_page() -> None:
         name="71-arbejdelse.txt",  # Exception by name!
     )
 
-    page = Page(lines=irregular_lines_input)
+    page = Page(lines=irregular_lines_input, name="71-arbejdelse.txt")
     entries = page.get_entries()
 
     expected_headwords = [
@@ -206,7 +206,7 @@ def test_parses_entries_from_first_page() -> None:
         name="0-abbot.txt",
     )
 
-    page = Page(lines=irregular_lines_input)
+    page = Page(lines=irregular_lines_input, name="0-abbot.txt")
     entries = page.get_entries()
 
     expected_headwords = [
@@ -257,8 +257,8 @@ def test_parses_rotated_and_re_ocrd_page() -> None:
         name="1109-hosskrift.txt",
     )
 
-    page1 = Page(lines=manipulated_input1)
-    page2 = Page(lines=manipulated_input2)
+    page1 = Page(lines=manipulated_input1, name="97-balstyrig.txt")
+    page2 = Page(lines=manipulated_input2, name="1109-hosskrift.txt")
 
     assert page1.is_left_side_page() is True
     assert page2.is_left_side_page() is True
