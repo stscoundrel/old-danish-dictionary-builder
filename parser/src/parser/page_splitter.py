@@ -75,6 +75,8 @@ class PageSplitter:
                 return ["K", "L"]
             case "2172-øxentorv.txt":
                 return ["O", "P"]
+            case "2387-røtte (rotte).txt":
+                return ["R", "S"]
             case "3554-vævel.txt":
                 return ["V", "X"]
             case "3555-ybisk.txt":
