@@ -55,6 +55,7 @@ class Dictionary:
             if entry.status != EntryStatus.VALID:
                 print("Unexpected entry!")
                 print(entry.headword)
+                print(entry.definitions)
                 print(entry.status)
 
         return filtered_entries

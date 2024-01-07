@@ -151,12 +151,12 @@ class Entry(NamedTuple):
 
         # Headwords are expected to end in comma or dash.
         # They should also start with one of the expected letters.
-        if (
-            len(headword) > 0
-            and headword[-1] not in [",", "-"]
-            and headword not in EXCEPTIONS_TO_COMMA_RULE
-        ) or headword[0] not in allowed_start_letters + known_incorrect_letters:
-            status = EntryStatus.PART_OF_PREVIOUS_ENTRY
+        if len(headword) > 0:
+            if (
+                headword[-1] not in [",", "-"]
+                and headword not in EXCEPTIONS_TO_COMMA_RULE
+            ) or headword[0] not in allowed_start_letters + known_incorrect_letters:
+                status = EntryStatus.PART_OF_PREVIOUS_ENTRY
 
         # Headwords with line breaks end in dash.
         # Glue the headword back together.
@@ -175,7 +175,7 @@ class Entry(NamedTuple):
             headword=cls._clean_headword_presentation(
                 headword, allowed_start_letters, known_incorrect_letters
             )
-            if status != EntryStatus.PART_OF_PREVIOUS_ENTRY
+            if (headword and status != EntryStatus.PART_OF_PREVIOUS_ENTRY)
             else headword,
             definitions=definitions,
             status=status,
