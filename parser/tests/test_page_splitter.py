@@ -214,12 +214,19 @@ def test_splits_page_with_irregular_meta_line() -> None:
 
     expected_h_headwords = [
         "Had",
-        "Hesiodus",  # TODO: GH-67 false positive, part of previous.
-        "Højsgaard",  # TODO: GH-67 false positive, part of previous.
+        "Hesiodus,",  # Looks like entry, part of previous.
+        "Højsgaard,",  # Looks like entry, part of previous.
+    ]
+
+    expected_h_statuses = [
+        EntryStatus.VALID,
+        EntryStatus.PART_OF_PREVIOUS_ENTRY,
+        EntryStatus.PART_OF_PREVIOUS_ENTRY,
     ]
 
     assert [entry.headword for entry in g_entries] == expected_g_headwords
     assert [entry.headword for entry in h_entries] == expected_h_headwords
+    assert [entry.status for entry in h_entries] == expected_h_statuses
 
     assert g_entries[0].definitions == "no. svælg. Moth. Smlgn.1.surgel."
     assert g_entries[1].definitions == "go. skylle hals. en. Moth."

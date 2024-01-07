@@ -316,7 +316,7 @@ def test_parses_rotated_and_re_ocrd_page() -> None:
         "Hovskræppe",
         "Hovalag",
         # TODO: Should have "Hovslager", but would need more tricky regex to detect it.
-        "Hibertz",  # TODO: GH-67, part of previous entry.
+        "Hibertz,",
         "Hovsmed",
     ]
 
@@ -337,7 +337,7 @@ def test_parses_rotated_and_re_ocrd_page() -> None:
         EntryStatus.VALID,
         EntryStatus.VALID,
         EntryStatus.VALID,
-        EntryStatus.VALID,
+        EntryStatus.PART_OF_PREVIOUS_ENTRY,
         EntryStatus.VALID,
     ]
 
