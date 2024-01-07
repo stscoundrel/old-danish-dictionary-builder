@@ -1,6 +1,7 @@
 from enum import Enum
-from typing import Final, NamedTuple
+from typing import Final, NamedTuple, Sequence
 
+# Incorrectly OCR'd headwords and their correct spellings.
 KNOWN_HEADWORD_TYPOS_TO_CORRECT_VERSIONS: Final[dict[str, str]] = {
     "Azelkøbstad": "Axelkøbstad",
     "Azelvej": "Axelvej",
@@ -13,10 +14,21 @@ KNOWN_HEADWORD_TYPOS_TO_CORRECT_VERSIONS: Final[dict[str, str]] = {
     "Ya(eyfærdig": "Yd(e)færdig",
 }
 
+# Completely oddly read headwords, who need manual replaces for both
+# headword and content.
 KNOWN_HEADWORD_OCR_SPLIT_ISSUES_TO_CORRECTLY_SPlIT: Final[
     dict[str, tuple[str, str]]
 ] = {"Abeganterino.narreverk.": ("Abeganteri", "no. narreverk. Moth.")}
 
+# Headwords that look correct, but were false positives.
+# Should be mapped with "part of previous entry" status.
+FALSE_POSITIVE_HEADWORDS: Final[Sequence[str]] = (
+    "Hesiodus,",
+    "Hibertz,",
+    "Højsgaard,",
+)
+
+# Headwords not expected to end in comma.
 EXCEPTIONS_TO_COMMA_RULE: Final[list[str]] = ["X"]
 
 
@@ -156,10 +168,15 @@ class Entry(NamedTuple):
             headword, definitions
         )
 
+        if headword in FALSE_POSITIVE_HEADWORDS:
+            status = EntryStatus.PART_OF_PREVIOUS_ENTRY
+
         return Entry(
             headword=cls._clean_headword_presentation(
                 headword, allowed_start_letters, known_incorrect_letters
-            ),
+            )
+            if status != EntryStatus.PART_OF_PREVIOUS_ENTRY
+            else headword,
             definitions=definitions,
             status=status,
         )
