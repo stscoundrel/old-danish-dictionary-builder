@@ -4,7 +4,7 @@ from typing import Final
 OLD_DANISH_ALPHABET: Final[str] = "abcdefghijklmnopqrstuvwxyzæøå"
 
 # Abridged alphabet for only comparing letters that may start headwords.
-HEADWORDS_ALPHABET: Final[str] = "abdefghijklmnoprstuvwxyzæøå"
+HEADWORDS_ALPHABET: Final[str] = "abdefghijklmnopqrstuvwxyzæøå"
 
 
 def is_after_in_alphabet(letter1: str, letter2: str) -> bool:
