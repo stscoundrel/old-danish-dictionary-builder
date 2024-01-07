@@ -110,5 +110,5 @@ def test_combines_entries() -> None:
     assert entries[31].definitions == (
         "no. ko, der gaves som afgift; hwat som the giffuit haffueere en two marck for een ydhe koo (1466). "
         "DC 183; 58 ydhekiør (1523). DM4 II. 4; tilltallit kronens bønder for the icke ville yde hannom "
-        "theris yde-koer (1553). Rsv I 210. Jf Bernts Il. 179; skatteko ovf. —"
+        "theris yde-koer (1553). Rsv I 210. Jf Bernts Il. 179; skatteko ovf."
     )

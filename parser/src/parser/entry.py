@@ -61,9 +61,15 @@ class Entry(NamedTuple):
         # Drop all linebreaks.
         cleaned_definitions = raw_definitions.replace("\n", "")
 
-        return " ".join(
+        cleaned_definitions = " ".join(
             [splitted for splitted in cleaned_definitions.split(" ") if splitted != ""]
         )
+
+        # Drop ending dashes, aka breakpoints for new entries.
+        if cleaned_definitions.endswith(" —"):
+            cleaned_definitions = cleaned_definitions[0:-2]
+
+        return cleaned_definitions
 
     @staticmethod
     def _clean_headword(raw_headword: str) -> str:

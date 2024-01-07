@@ -221,9 +221,8 @@ def test_splits_page_with_irregular_meta_line() -> None:
     assert [entry.headword for entry in g_entries] == expected_g_headwords
     assert [entry.headword for entry in h_entries] == expected_h_headwords
 
-    # TODO: GH-68: trim "—" and/or "" —" from ends of definitions.
-    assert g_entries[0].definitions == "no. svælg. Moth. Smlgn.1.surgel. —"
-    assert g_entries[1].definitions == "go. skylle hals. en. Moth. —"
+    assert g_entries[0].definitions == "no. svælg. Moth. Smlgn.1.surgel."
+    assert g_entries[1].definitions == "go. skylle hals. en. Moth."
     assert g_entries[2].definitions == "no. vand Ul at skylle halsen med, Moth"
     assert g_entries[4].definitions == "se u. gjord."
     assert g_entries[-1].definitions == (

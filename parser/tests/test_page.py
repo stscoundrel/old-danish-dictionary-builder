@@ -141,7 +141,7 @@ def test_parses_simple_entries() -> None:
         "er det affkommen, mand neppe kiender slecten. Hvitf. VIII 365. — 3) aflægges (t. abkommen.); at the ismaa "
         "markede ere aflagde, oc att ingen haffaer fordelle ther af, at the ere afkommen (1542). D. Mag. IV. 288. — "
         "4) overkomme; at voris depu- terede samme miinstringer, naar de afkomme kand, self skall bjwaane (1890). "
-        "Geh. Ark. Årsb. IL 294. —"
+        "Geh. Ark. Årsb. IL 294."
     )
 
     assert [entry.headword for entry in entries] == expected_headwords
