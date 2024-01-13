@@ -36,7 +36,7 @@ LETTER_SPLIT_MAPPING: Final[dict[str, int]] = {
     "1912-mørsk.txt": 21,
     "2005-nøvelige.txt": 23,
     "2172-øxentorv.txt": 18,
-    "2387-røtte (rotte).txt": 38,
+    "2387-røtte (rotte).txt": 37,
     "2921-søstergård.txt": 26,
     "3156-tøve.txt": 16,
     "3554-vævel.txt": 49,
