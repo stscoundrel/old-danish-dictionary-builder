@@ -327,3 +327,64 @@ def test_splits_page_with_letter_and_entry_expections() -> None:
         "tudsesten udf. Over- troisk brug, jf Frisch L551a: kroten- stein."
     )
     assert p_entries[-1].definitions == "se paje."
+
+
+def test_splits_page_re_ocrd_for_better_results() -> None:
+    """
+    Some page scans/images are so skewed that they need to be run through rotator
+    to turn them into pages that can be read automatically. Test one of those cases.
+    """
+    manipulated_input = open_test_file("simple-page-rotated-for-better-ocr3.txt")
+
+    page1, page2 = PageSplitter.split_page("2387-røtte (rotte).txt", manipulated_input)
+
+    entries1 = page1.get_entries()
+    entries2 = page2.get_entries()
+
+    expected_headwords1 = [
+        "Røtte",
+        "Røttebolig",
+        "Røtteflok",
+        "Røttekrud",
+        # TODO: GH-85 Should have "Røttelort"
+        "Røttenest",
+        "Røtteskind",
+        # TODO: Should have "Røtteskar", tricky to detect.
+        # TODO: GH-84 Should have "Røve", OCR'd as "Bøve"
+        # TODO: GH-84 Should have another "Røve", OCR'd as "Bøve"
+        "Røvne",
+    ]
+
+    expected_statuses1 = [
+        EntryStatus.PART_OF_PREVIOUS_ENTRY,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+    ]
+
+    assert [entry.headword for entry in entries1] == expected_headwords1
+    assert [entry.status for entry in entries1] == expected_statuses1
+
+    expected_headwords2 = [
+        "Sabbat",
+        "Sabbatdag",
+        "Sabbe",
+        "Sahberfo(de)r",
+        "Sabel",
+        "Sable",
+    ]
+
+    expected_statuses2 = [
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+    ]
+
+    assert [entry.headword for entry in entries2] == expected_headwords2
+    assert [entry.status for entry in entries2] == expected_statuses2
