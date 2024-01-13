@@ -17,6 +17,7 @@ KNOWN_HEADWORD_TYPOS_TO_CORRECT_VERSIONS: Final[dict[str, str]] = {
     "Ratteskind": "Røtteskind",
     "Sabbatdsg": "Sabbatdag",
     "Søble": "Sable",
+    "Tiføjmmer": "Ti[ø]mmer",
     "Ya(eyfærdig": "Yd(e)færdig",
 }
 

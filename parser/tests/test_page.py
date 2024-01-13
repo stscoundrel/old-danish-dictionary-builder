@@ -256,15 +256,22 @@ def test_parses_rotated_and_re_ocrd_page() -> None:
         file="simple-page-rotated-for-better-ocr2.txt",
         name="1109-hosskrift.txt",
     )
+    manipulated_input3 = _single_column_test_file(
+        file="simple-page-rotated-for-better-ocr4.txt",
+        name="3021-timesand.txt",
+    )
 
     page1 = Page(lines=manipulated_input1, name="97-balstyrig.txt")
     page2 = Page(lines=manipulated_input2, name="1109-hosskrift.txt")
+    page3 = Page(lines=manipulated_input3, name="3021-timesand.txt")
 
     assert page1.is_left_side_page() is True
     assert page2.is_left_side_page() is True
+    assert page3.is_left_side_page() is True
 
     entries1 = page1.get_entries()
     entries2 = page2.get_entries()
+    entries3 = page3.get_entries()
 
     expected_headwords1 = [
         "mellem",
@@ -343,3 +350,38 @@ def test_parses_rotated_and_re_ocrd_page() -> None:
 
     assert [entry.headword for entry in entries2] == expected_headwords2
     assert [entry.status for entry in entries2] == expected_statuses2
+
+    expected_headwords3 = [
+        "m.",
+        "Timesand",
+        "Timeskjul",
+        "Time",
+        "Timelig",
+        "Timling",
+        "Timmer",
+        "Ti[ø]mmer",
+        "Tims",
+        "Timse",
+        "Tin",
+        "Tind",
+        "Tinding",
+    ]
+
+    expected_statuses3 = [
+        EntryStatus.PART_OF_PREVIOUS_ENTRY,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+    ]
+
+    assert [entry.headword for entry in entries3] == expected_headwords3
+    assert [entry.status for entry in entries3] == expected_statuses3
