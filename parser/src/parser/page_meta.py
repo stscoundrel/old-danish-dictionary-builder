@@ -73,6 +73,17 @@ Korsaften.txt""": [
     "3635-årtrålig.txt": ["Å", "Æ"],
 }
 
+KNOWN_OCR_ERROR_SEARCH_REPLACES: Final[dict[str, list[tuple[str, str]]]] = {
+    "97-balstyrig.txt": [("Bandsdoc.", "Bandsdag,")],
+    "1109-hosskrift.txt": [("Hovslager", "Hovslager,")],
+    "2387-røtte (rotte).txt": [
+        ("Bøttelort", "Røttelort"),
+        ("Røtteskår", "Røtteskar,"),
+        ("Bøve", "Røve"),
+    ],
+    "2172-øxentorv.txt": [("Fadre", "Padre"), ("Padse.", "Padse,")],
+}
+
 
 class PageMeta:
     @staticmethod
@@ -90,3 +101,7 @@ class PageMeta:
     @staticmethod
     def get_pages_splits() -> dict[str, int]:
         return LETTER_SPLIT_MAPPING
+
+    @staticmethod
+    def get_known_search_replaces(page: str) -> list[tuple[str, str]]:
+        return KNOWN_OCR_ERROR_SEARCH_REPLACES.get(page, [])

@@ -10,12 +10,26 @@ METALINE_ENTRY_SEPARATOR: Final[str] = "—"
 class Page:
     _page_number: int | None = None
     _letters_in_page: list[str] | None = None
+    _raw_content: list[str]
 
     def __init__(self, lines: list[str], name: str) -> None:
         # While pages have irregular meta lines, column parsing should've offsetted it already.
         self.meta = lines[0]
-        self.content = lines[1:]
+        self._raw_content = lines[1:]
         self.name = name
+        self.content = self._proofread_lines(lines[1:])
+
+    def _proofread_lines(self, raw_content: list[str]) -> list[str]:
+        # For known OCR erors in line, search/replace them here
+        # based on mapping of page name => known errors.
+        content = raw_content
+
+        if search_replaces := PageMeta.get_known_search_replaces(self.name):
+            for search, replace in search_replaces:
+                for idx, line in enumerate(content):
+                    content[idx] = line.replace(search, replace)
+
+        return content
 
     def get_separators_for(self, letter: str) -> list[str]:
         return [

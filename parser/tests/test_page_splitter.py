@@ -261,7 +261,7 @@ def test_splits_page_with_letter_and_entry_expections() -> None:
     o_entries = page_o.get_entries()
     p_entries = page_p.get_entries()
     assert len(o_entries) == 6
-    assert len(p_entries) == 12
+    assert len(p_entries) == 14
 
     expected_o_headwords = ["Oxentorv", "Oxen", "Oxel", "Oxle", "Oya", "Oæfle"]
 
@@ -275,9 +275,9 @@ def test_splits_page_with_letter_and_entry_expections() -> None:
         "Paddepyt",
         "Paddesten",
         "Padel",
-        # TODO: Should have "Padre", but is OCR'd as "Fadre". Hard to detect.
+        "Padre",
         "Padren",
-        # TODO: Should have "Padse". Has period instead of comma in OCR, hard to detect.
+        "Padse",
         "Pagagi",
         "Page",
     ]
@@ -292,6 +292,8 @@ def test_splits_page_with_letter_and_entry_expections() -> None:
     ]
 
     expected_p_statuses = [
+        EntryStatus.VALID,
+        EntryStatus.VALID,
         EntryStatus.VALID,
         EntryStatus.VALID,
         EntryStatus.VALID,
@@ -346,17 +348,21 @@ def test_splits_page_re_ocrd_for_better_results() -> None:
         "Røttebolig",
         "Røtteflok",
         "Røttekrud",
-        # TODO: GH-85 Should have "Røttelort"
+        "Røttelort",
         "Røttenest",
         "Røtteskind",
-        # TODO: Should have "Røtteskar", tricky to detect.
-        # TODO: GH-84 Should have "Røve", OCR'd as "Bøve"
-        # TODO: GH-84 Should have another "Røve", OCR'd as "Bøve"
+        "Røtteskar",
+        "Røve",
+        "Røve",
         "Røvne",
     ]
 
     expected_statuses1 = [
         EntryStatus.PART_OF_PREVIOUS_ENTRY,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
+        EntryStatus.VALID,
         EntryStatus.VALID,
         EntryStatus.VALID,
         EntryStatus.VALID,
