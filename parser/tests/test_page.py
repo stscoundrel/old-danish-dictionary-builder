@@ -283,13 +283,14 @@ def test_parses_rotated_and_re_ocrd_page() -> None:
         "Band",
         "Band",
         "Bandsbrev",
-        # TODO: should have "Bandsdag"
+        "Bandsdag",
         "Bandsfolk",
         "Bandføre",
     ]
 
     expected_statuses1 = [
         EntryStatus.PART_OF_PREVIOUS_ENTRY,
+        EntryStatus.VALID,
         EntryStatus.VALID,
         EntryStatus.VALID,
         EntryStatus.VALID,
@@ -322,13 +323,14 @@ def test_parses_rotated_and_re_ocrd_page() -> None:
         "Hovblad",
         "Hovskræppe",
         "Hovalag",
-        # TODO: Should have "Hovslager", but would need more tricky regex to detect it.
+        "Hovslager",
         "Hibertz,",
         "Hovsmed",
     ]
 
     expected_statuses2 = [
         EntryStatus.PART_OF_PREVIOUS_ENTRY,
+        EntryStatus.VALID,
         EntryStatus.VALID,
         EntryStatus.VALID,
         EntryStatus.VALID,
