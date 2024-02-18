@@ -8,10 +8,7 @@ Currently work-in-progress, but the goal is to offer JSON dataset with normalize
 - Downloads all scanned pages.
 - Rotates images that are too skewed for good ORC results.
 - Feeds images to image-to-text (OCR) library.
-
-## Upcoming features
-- Parse ORC results to machine-readable structured formats. Active work in progress.
-
+- Parse OCR'd text to json.
 
 ### 1. Run scraper to download page images.
 
@@ -51,8 +48,17 @@ This is likely to take long, possibly hours.
 
 Text files will be generated to `image-to-text/resources/text` folder.
 
+### 4. Parse OCR'd text to JSON.
 
-### About "Dictionary of the Old Danish Language"
+Setup Python 3.11. Copy OCR'd text files to `parser/resources/text` folder.
+
+Run the Python script inside the parser folder. For example `python3 run main.py`. It generates `dictionary.json` file containing structured json representation of all the scanned text.
+
+## Quality of output
+
+The quality of output is a matter to be improved. Some scans should be rotated, some malformatted text should be manually improved, some edge cases should be ironed out with application logic. All in all, it will probably never be perfect, but considering the sheer size of the original work, it is somewhat impressive that it even works at all.
+
+## About "Dictionary of the Old Danish Language"
 
 _"Ordbog til det ældre danske Sprog"_ dictionary was published in late 1800s by Otto Kalkar. Old Danish is an ancestor language of Danish, which developed from Old East Norse, the eastern dialect of Old Norse, at the end of the Viking Age. The dictionary itself is called "the dictionary of elder Danish speech" and it covers time period of 1300 - 1700.
 
