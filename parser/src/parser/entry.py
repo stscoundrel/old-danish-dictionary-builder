@@ -51,6 +51,42 @@ class Entry(NamedTuple):
     definitions: str
     status: EntryStatus
 
+    @property
+    def definitions_list(self) -> list[str]:
+        entry_starts = ["1)", "2)", "3)", "4)"]
+
+        # We only want to process "intact" looking definitions.
+        if "1) " not in self.definitions:
+            return [self.definitions]
+
+        lines = []
+        line = ""
+
+        words = self.definitions.split(" ")
+
+        # Walk through words, parsing new lines with new numbered indexes.
+        for word in words:
+            if word in entry_starts:
+                lines.append(line.strip())
+                line = ""
+
+            line = f"{line} {word}"
+
+        lines.append(line.strip())
+
+        # Sanity: we want each line to be properly numbered with no jumps.
+        expected_number = 1
+
+        for line in lines:
+            first = line[0]
+            if first.isnumeric():
+                if int(first) != expected_number:
+                    return [self.definitions]
+
+                expected_number += 1
+
+        return lines
+
     def to_json(self) -> dict[str, str]:
         return {
             "headword": self.headword,
