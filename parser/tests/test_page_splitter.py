@@ -54,16 +54,22 @@ def test_splits_page_correctly() -> None:
 
     expected_b_headwords = [
         "Bable",
-        "Babel",  # TODO: GH-29, should be part of previous entry.
+        "Babel,",  # Part of previous, therefore the comma.
         "Babler",
     ]
 
     assert [entry.headword for entry in b_entries] == expected_b_headwords
 
+    expected_b_statuses = [
+        EntryStatus.VALID,
+        EntryStatus.PART_OF_PREVIOUS_ENTRY,
+        EntryStatus.VALID,
+    ]
+
+    assert [b_entry.status for b_entry in b_entries] == expected_b_statuses
+
     # Assert content of the last first, ensure nothing was cut off.
-    assert (
-        b_entries[0].definitions == "go. 1) at tale uforståe- ligt. Moth;"
-    )  # TODO: GH-29, part of content in next entry.
+    assert b_entries[0].definitions == "go. 1) at tale uforståe- ligt. Moth;"
 
     # Axeltorg was originally line-splitted headword. Ensure no content was lost in parsing.
     expected_content = (
