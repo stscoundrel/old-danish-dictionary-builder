@@ -59,7 +59,7 @@ class Entry(NamedTuple):
         if "1) " not in self.definitions:
             return [self.definitions]
 
-        lines = []
+        lines: list[str] = []
         line = ""
 
         words = self.definitions.split(" ")
@@ -77,6 +77,8 @@ class Entry(NamedTuple):
         # Sanity: we want each line to be properly numbered with no jumps.
         expected_number = 1
 
+        lines = [line for line in lines if len(line)]
+
         for line in lines:
             first = line[0]
             if first.isnumeric():
@@ -87,10 +89,10 @@ class Entry(NamedTuple):
 
         return lines
 
-    def to_json(self) -> dict[str, str]:
+    def to_json(self) -> dict[str, str | list[str]]:
         return {
             "headword": self.headword,
-            "definitions": self.definitions,
+            "definitions": self.definitions_list,
         }
 
     @staticmethod
