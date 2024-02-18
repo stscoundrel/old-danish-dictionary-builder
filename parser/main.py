@@ -7,6 +7,6 @@ pages = reader.read_files()
 
 dictionary_pages = [DictionaryPage(name=name, lines=lines) for name, lines in pages]
 
-dictionary = Dictionary(dictionary_pages=dictionary_pages[0:50])
+dictionary = Dictionary(dictionary_pages=dictionary_pages)
 
 writer.write_dictionary_to_json_file(dictionary)
