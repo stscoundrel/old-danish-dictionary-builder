@@ -30,6 +30,7 @@ KNOWN_HEADWORD_OCR_SPLIT_ISSUES_TO_CORRECTLY_SPlIT: Final[
 # Headwords that look correct, but were false positives.
 # Should be mapped with "part of previous entry" status.
 FALSE_POSITIVE_HEADWORDS: Final[Sequence[str]] = (
+    "Babel,",
     "Hesiodus,",
     "Hibertz,",
     "Højsgaard,",
