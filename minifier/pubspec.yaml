@@ -1,0 +1,11 @@
+name: minifier
+description: Minify generated dictionary output for more compressed transfer.
+version: 0.1.0
+repository: https://github.com/stscoundrel/old-danish-dictionary-builder
+
+environment:
+  sdk: ^3.1.5
+
+dev_dependencies:
+  lints: ^2.0.0
+  test: ^1.21.0
