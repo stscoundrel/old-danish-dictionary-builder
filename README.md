@@ -54,6 +54,18 @@ Setup Python 3.11. Copy OCR'd text files to `parser/resources/text` folder.
 
 Run the Python script inside the parser folder. For example `python3 run main.py`. It generates `dictionary.json` file containing structured json representation of all the scanned text.
 
+### 5. Compress outputted json for programmatic use
+
+The produced dictionary is quite hefty, close to 20MB. To ship it more effectively as part of library, you can compress it.
+
+Setup Dart. Add generated `dictionary.json` to `minifier/resources`. 
+
+To generate compressed versions:
+
+`dart run` inside minifier folder.
+
+Currently only generates gzipped output, around 6mb instead of 18mb.
+
 ## Quality of output
 
 The quality of output is a matter to be improved. Some scans should be rotated, some malformatted text should be manually improved, some edge cases should be ironed out with application logic. All in all, it will probably never be perfect, but considering the sheer size of the original work, it is somewhat impressive that it even works at all.
