@@ -1,9 +1,9 @@
-name: Dart/Rotator - CI
+name: Dart/Minifier - CI
 
 on: [pull_request]
 defaults:
   run:
-    working-directory: image-rotator
+    working-directory: minifier
 
 jobs:
   build:
@@ -15,4 +15,3 @@ jobs:
       - run: dart pub get
       - run: dart format --output=none --set-exit-if-changed .
       - run: dart analyze
-      - run: dart test

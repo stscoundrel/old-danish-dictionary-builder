@@ -1,4 +1,4 @@
-name: TypeScript - CI
+name: TypeScript/ImageToText - CI
 
 on: [pull_request]
 
