@@ -39,6 +39,15 @@ updates:
         patterns:
           - "*"
 
+  - package-ecosystem: "pub"
+    directory: "/minifier"
+    schedule:
+      interval: monthly
+    groups:
+      dart-dependencies:
+        patterns:
+          - "*"
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
