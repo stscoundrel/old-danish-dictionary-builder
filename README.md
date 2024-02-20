@@ -4,6 +4,10 @@ Build machine-readable version of Otto Kalkar's "Dictionary of the Old Danish La
 
 Currently work-in-progress, but the goal is to offer JSON dataset with normalized dictionary data. It might very well end up being a slow process which requires a lot of manual labor, but we'll see how far we can get with code alone.
 
+## Implementations using the output of the builder
+
+- [TypeScript / Node.js library](https://github.com/stscoundrel/old-danish-dictionary)
+
 ## Current features:
 - Downloads all scanned pages.
 - Rotates images that are too skewed for good ORC results.
