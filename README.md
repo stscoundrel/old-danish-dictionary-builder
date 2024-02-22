@@ -78,4 +78,10 @@ The quality of output is a matter to be improved. Some scans should be rotated, 
 
 _"Ordbog til det ældre danske Sprog"_ dictionary was published in late 1800s by Otto Kalkar. Old Danish is an ancestor language of Danish, which developed from Old East Norse, the eastern dialect of Old Norse, at the end of the Viking Age. The dictionary itself is called "the dictionary of elder Danish speech" and it covers time period of 1300 - 1700.
 
-Despite its name, Kalkars dictionary is not exactly a dictionary of "Old Danish" _(=olddansk, often included in umbrella of "Old Norse")_, as it covers period from Middle Danish _(=gammeldansk)_ to early Modern Danish _(=ældre nydansk)_. However, Old Danish itself is not particularly well defined period in the language, as some philologists consider anything from runic Danish to late middle Danish to be "old Danish". Due to the large timespan of the dictionary, the oldest vocabulary would be close to the language spoken by Late Viking Age danes, whilst newest entries would not differ much from Danish of the 1800's.
+Despite its name, Kalkars dictionary is not only a dictionary of "Old Danish", as it covers period from Middle Danish _(=gammeldansk)_ to early Modern Danish _(=ældre nydansk)_. The book covers vocabulary from 1300 - 1700, while the "Old Danish" period stops at 1500s. Due to the large timespan of the dictionary, the oldest vocabulary would be close to the language spoken by Late Viking Age danes, whilst newest entries would not differ much from Danish of the 1800's.
+
+The term "Old Danish" in itself covers multiple periods in Danish language, namely:
+
+- Runic Danish 800 - 1100 (olddansk in Danish. Often included in "Old Norse")
+- Early Middle Danish 1100 - 1350 (yngre gammeldansk/middeldansk in Danish)
+- Late Middle Danish 1350 - 1525 (ældre gammeldansk/middeldansk in Danish)
