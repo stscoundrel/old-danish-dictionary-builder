@@ -42,6 +42,9 @@ FALSE_POSITIVE_HEADWORDS: Final[Sequence[str]] = (
     "Moth,",
     "Moth;",
     "Moth:",
+    # "Saxo" is same issue as "Moth"
+    "Saxo.",
+    "Saxo,",
 )
 
 # Headwords not expected to end in comma.
