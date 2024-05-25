@@ -34,6 +34,13 @@ FALSE_POSITIVE_HEADWORDS: Final[Sequence[str]] = (
     "Hesiodus,",
     "Hibertz,",
     "Højsgaard,",
+    # "Moth" is name of a source in book,
+    # but looks like a headword.
+    # Basically a murheenkryyni.
+    "Moth.",
+    "Moth,",
+    "Moth;",
+    "Moth:",
 )
 
 # Headwords not expected to end in comma.
