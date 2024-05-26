@@ -74,6 +74,7 @@ Korsaften.txt""": [
 }
 
 KNOWN_OCR_ERROR_SEARCH_REPLACES: Final[dict[str, list[tuple[str, str]]]] = {
+    "1-abelig.txt": [("Ablat se oblat.", "Ablat, se oblat.")],
     "97-balstyrig.txt": [("Bandsdoc.", "Bandsdag,")],
     "1109-hosskrift.txt": [("Hovslager", "Hovslager,")],
     "2387-røtte (rotte).txt": [
