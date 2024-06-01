@@ -4,6 +4,8 @@ import io.github.stscoundrel.analyzer.Reader
 fun main(args: Array<String>) {
     val reader = Reader()
     val analyzer = Analyzer(reader.readOCRTextFiles())
+    val skewedPages = analyzer.listSkewedScans()
 
-    analyzer.listSkewedScans().sorted().forEach { println(it) }
+    println("Detected possibly skewed pages: ${skewedPages.size}")
+    skewedPages.sorted().forEach { println(it) }
 }
