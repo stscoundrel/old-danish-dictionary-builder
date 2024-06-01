@@ -78,6 +78,7 @@ KNOWN_OCR_ERROR_SEARCH_REPLACES: Final[dict[str, list[tuple[str, str]]]] = {
     "97-balstyrig.txt": [("Bandsdoc.", "Bandsdag,")],
     "1109-hosskrift.txt": [("Hovslager", "Hovslager,")],
     "1781-midaldret.txt": [("Moth.—Middagskost,", "Moth. —Middagskost,")],
+    "1820-mildelse.txt": [("Moth.—Mildre", "Moth. —Mildre")],
     "2387-røtte (rotte).txt": [
         ("Bøttelort", "Røttelort"),
         ("Røtteskår", "Røtteskar,"),
