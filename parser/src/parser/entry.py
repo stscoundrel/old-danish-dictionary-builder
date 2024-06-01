@@ -13,6 +13,7 @@ KNOWN_HEADWORD_TYPOS_TO_CORRECT_VERSIONS: Final[dict[str, str]] = {
     "Hovskræpps": "Hovskræppe",
     "Hovslag": "Hovalag",
     "Metørpenninge": "Meterpenninge",
+    "Midledest": "Middest",
     "Oys": "Oya",
     "På": "Pa",
     "Paådepyt": "Paddepyt",
