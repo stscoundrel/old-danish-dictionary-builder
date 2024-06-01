@@ -4,6 +4,7 @@ from typing import Final, NamedTuple, Sequence
 # Incorrectly OCR'd headwords and their correct spellings.
 KNOWN_HEADWORD_TYPOS_TO_CORRECT_VERSIONS: Final[dict[str, str]] = {
     "A4": "Ad",
+    "Ademsbid": "Adamsbid",
     "Azelkøbstad": "Axelkøbstad",
     "Azelvej": "Axelvej",
     "Bandebrev": "Bandsbrev",
