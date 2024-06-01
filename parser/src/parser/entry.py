@@ -41,6 +41,7 @@ FALSE_POSITIVE_HEADWORDS: Final[Sequence[str]] = (
     # "Moth", "Saxo" and "Herlufsh" are names of a sources
     # in book, but they look like a headwords.
     # Basically a murheenkryyni.
+    "Moth;2mulejern",
     "Moth.",
     "Moth,",
     "Moth;",
