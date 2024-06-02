@@ -1,5 +1,9 @@
 package io.github.stscoundrel.analyzer
 
+enum class SkewReason {
+    LAST_LINE, TOO_FEW_COLUMNS, TOO_MANY_EMPTY_LINES
+}
+
 class Analyzer(private val filesAndContents: Map<String, List<String>>) {
     private val falsePositiveSkewedPagesByLastLine: List<String> = listOf(
         "0-abbot.txt",
@@ -26,7 +30,11 @@ class Analyzer(private val filesAndContents: Map<String, List<String>>) {
         return pageHasSkewedLikeLastLine(page) or pageHasUnExpectedColumnMarkerCount(page)
     }
 
-    fun listSkewedScans(): List<String> {
-        return filesAndContents.filter { pageSeemsSkewed(it) }.map { it.key }
+    fun listSkewedScans(): Map<SkewReason, List<String>> {
+        return mapOf(
+            SkewReason.LAST_LINE to filesAndContents.filter { pageHasSkewedLikeLastLine(it) }.map { it.key },
+            SkewReason.TOO_FEW_COLUMNS to filesAndContents.filter { pageHasUnExpectedColumnMarkerCount(it) }
+                .map { it.key },
+        )
     }
 }
