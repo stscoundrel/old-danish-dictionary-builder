@@ -16,5 +16,5 @@ fun main(args: Array<String>) {
     val analyzer = Analyzer(reader.readOCRTextFiles())
     val skewedPages = analyzer.listSkewedScans()
 
-    skewedPages.forEach{ outputSkewReasonAndResults(it) }
+    skewedPages.forEach { outputSkewReasonAndResults(it) }
 }
