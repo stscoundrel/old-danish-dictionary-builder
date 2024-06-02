@@ -14,6 +14,8 @@ Currently work-in-progress, but the goal is to offer JSON dataset with normalize
 - Feeds images to image-to-text (OCR) library.
 - Parse OCR'd text to json.
 
+## Steps to produce the final json
+
 ### 1. Run scraper to download page images.
 
 Setup Maven & run `mvn install` inside the `scraper` subfolder. Best of luck with that.
@@ -69,6 +71,27 @@ To generate compressed versions:
 `dart run` inside minifier folder.
 
 Currently only generates gzipped output, around 6mb instead of 18mb.
+
+## Additional tools for development
+
+### Scan rotator
+
+Some scans are skewed / in odd angle, which means the OCR result may be less than optimal. This is mostly due to OCR issues about defining where the line really starts and ends, if they're not horizontal enough.
+
+`image-rotator` is a Dart app that can rotate images based on mapping. Problematic ones can be added to mapping, resaved as rotated images & then read again with OCR step.
+
+To run it
+
+`dart run`
+
+### OCR result analyzer
+
+`analyzer` contains Kotlin/Gradle script for analyzing OCR results and trying to identify possibly skewed scan results. When accurate, it can point out pages that could benefit from rotation & another round of OCR for better results.
+
+To run it:
+
+`./gradlew run`
+
 
 ## Quality of output
 
