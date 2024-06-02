@@ -224,6 +224,8 @@ class Entry(NamedTuple):
                 and headword not in EXCEPTIONS_TO_COMMA_RULE
             ) or headword[0] not in allowed_start_letters:
                 status = EntryStatus.PART_OF_PREVIOUS_ENTRY
+        else:
+            status = EntryStatus.PART_OF_PREVIOUS_ENTRY
 
         # Headwords with line breaks end in dash.
         # Glue the headword back together.
