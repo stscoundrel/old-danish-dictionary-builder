@@ -6,6 +6,7 @@ const Map<String, double> imagesToRotate = {
   'resources/images/1000-S. Hansbrod.gif': -1.4,
   'resources/images/1109-hosskrift.gif': 1.15,
   'resources/images/1531-kårekonge.gif': -1.0,
+  'resources/images/1765-manglestok.gif': -0.8,
   'resources/images/1783-midsunds.gif': -1.9,
   'resources/images/1817-metal.gif': -0.5,
   'resources/images/2387-røtte (rotte).gif': -2.33,
