@@ -12,6 +12,8 @@ class Analyzer(private val filesAndContents: Map<String, List<String>>) {
     // Ideal page could have up to 55. This will probably need tweaking with time.
     private val thresholdOfColumnMarkers = 30
 
+    private val thresholdOfEmptyLines = 20
+
     private fun pageHasSkewedLikeLastLine(page: Map.Entry<String, List<String>>): Boolean {
         // Generally, last line with odd leftovers mean page
         // was originally skewed, and line-by-line reading causes
@@ -26,8 +28,11 @@ class Analyzer(private val filesAndContents: Map<String, List<String>>) {
         return page.value.count { it.contains(" | ") } < thresholdOfColumnMarkers
     }
 
-    private fun pageSeemsSkewed(page: Map.Entry<String, List<String>>): Boolean {
-        return pageHasSkewedLikeLastLine(page) or pageHasUnExpectedColumnMarkerCount(page)
+    private fun pageHasTooManyEmptyLines(page: Map.Entry<String, List<String>>): Boolean {
+        // Generally, pages should not contain almost any empty lines.
+        // It many of them appear, OCR might've had hard time deciding where lines are,
+        // meaning scan could be skewed.
+        return page.value.count { it.isEmpty() } > thresholdOfEmptyLines
     }
 
     fun listSkewedScans(): Map<SkewReason, List<String>> {
@@ -35,6 +40,7 @@ class Analyzer(private val filesAndContents: Map<String, List<String>>) {
             SkewReason.LAST_LINE to filesAndContents.filter { pageHasSkewedLikeLastLine(it) }.map { it.key },
             SkewReason.TOO_FEW_COLUMNS to filesAndContents.filter { pageHasUnExpectedColumnMarkerCount(it) }
                 .map { it.key },
+            SkewReason.TOO_MANY_EMPTY_LINES to filesAndContents.filter { pageHasTooManyEmptyLines(it) }.map { it.key },
         )
     }
 }
