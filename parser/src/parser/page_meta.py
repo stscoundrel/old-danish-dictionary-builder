@@ -100,6 +100,13 @@ KNOWN_OCR_ERROR_SEARCH_REPLACES: Final[dict[str, list[tuple[str, str]]]] = {
     "2172-øxentorv.txt": [("Fadre", "Padre"), ("Padse.", "Padse,")],
 }
 
+PAGES_TO_CUSTOM_COLUMN_BREAKS_IN_LINES: Final[dict[str, list[tuple[str, int]]]] = {
+    # Page -> problematic line -> nth character to break from.
+    "1783-midsunds.txt": [
+        ("midttiden afforåret.Moth.—Mid- lemmand; han (2: Jesus) er eth med-", 31)
+    ],
+}
+
 
 class PageMeta:
     @staticmethod
@@ -121,3 +128,7 @@ class PageMeta:
     @staticmethod
     def get_known_search_replaces(page: str) -> list[tuple[str, str]]:
         return KNOWN_OCR_ERROR_SEARCH_REPLACES.get(page, [])
+
+    @staticmethod
+    def get_custom_column_breaks(page: str) -> list[tuple[str, int]]:
+        return PAGES_TO_CUSTOM_COLUMN_BREAKS_IN_LINES.get(page, [])
