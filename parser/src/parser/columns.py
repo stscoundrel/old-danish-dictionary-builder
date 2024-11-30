@@ -27,7 +27,14 @@ def _get_column_divider(line: str) -> str | None:
     return None
 
 
-def _get_divided_lines(line: str) -> list[str]:
+def _get_divided_lines(page: str, line: str) -> list[str]:
+    # Check page for known exceptions in lines.
+    exceptions = PageMeta.get_custom_column_breaks(page)
+
+    for exception in exceptions:
+        if exception[0] in line:
+            return [line[: exception[1]], line[exception[1] :]]  # noqa: E203
+
     divider = _get_column_divider(line)
 
     if divider:
@@ -59,7 +66,7 @@ def parse_column(page: list[str], name: str) -> list[str]:
 
     for line in page[content_start_index:]:
         if len(line) > 20:  # Skip letter headings and oddities.
-            divided = _get_divided_lines(line)
+            divided = _get_divided_lines(name, line)
 
             match len(divided):
                 case 0:

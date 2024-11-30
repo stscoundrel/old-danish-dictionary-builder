@@ -241,9 +241,11 @@ class Entry(NamedTuple):
             status = EntryStatus.PART_OF_PREVIOUS_ENTRY
 
         return Entry(
-            headword=cls._clean_headword_presentation(headword, allowed_start_letters)
-            if (headword and status != EntryStatus.PART_OF_PREVIOUS_ENTRY)
-            else headword,
+            headword=(
+                cls._clean_headword_presentation(headword, allowed_start_letters)
+                if (headword and status != EntryStatus.PART_OF_PREVIOUS_ENTRY)
+                else headword
+            ),
             definitions=definitions,
             status=status,
         )
