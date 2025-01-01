@@ -16,8 +16,8 @@
     "typescript": "^5.7.2"
   },
   "devDependencies": {
-    "@types/node": "^22.10.1",
-    "prettier": "^3.4.1"
+    "@types/node": "^22.10.3",
+    "prettier": "^3.4.2"
   },
   "scripts": {
     "images-to-text": "ts-node src/read-all-images.ts",
