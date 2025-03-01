@@ -133,10 +133,10 @@ packages:
     dependency: "direct main"
     description:
       name: image
-      sha256: "8346ad4b5173924b5ddddab782fc7d8a6300178c8b1dc427775405a01701c4a6"
+      sha256: "13d3349ace88f12f4a0d175eb5c12dcdd39d35c4c109a8a13dfeb6d0bd9e31c3"
       url: "https://pub.dev"
     source: hosted
-    version: "4.5.2"
+    version: "4.5.3"
   io:
     dependency: transitive
     description:
@@ -341,10 +341,10 @@ packages:
     dependency: "direct dev"
     description:
       name: test
-      sha256: "8391fbe68d520daf2314121764d38e37f934c02fd7301ad18307bd93bd6b725d"
+      sha256: "301b213cd241ca982e9ba50266bd3f5bd1ea33f1455554c5abb85d1be0e2d87e"
       url: "https://pub.dev"
     source: hosted
-    version: "1.25.14"
+    version: "1.25.15"
   test_api:
     dependency: transitive
     description:
