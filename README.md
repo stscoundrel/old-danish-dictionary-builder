@@ -6,6 +6,7 @@ Currently work-in-progress, but the goal is to offer JSON dataset with normalize
 
 ## Implementations using the output of the builder
 
+- [Online dictionary](https://old-danish-dictionary.vercel.app/)
 - [TypeScript / Node.js library](https://github.com/stscoundrel/old-danish-dictionary)
 
 ## Current features:
