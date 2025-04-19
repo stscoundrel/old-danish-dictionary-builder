@@ -11,12 +11,12 @@
   },
   "dependencies": {
     "skilja": "^0.9.0",
-    "tesseract.js": "^6.0.0",
+    "tesseract.js": "^6.0.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.3"
   },
   "devDependencies": {
-    "@types/node": "^22.13.17",
+    "@types/node": "^22.14.1",
     "prettier": "^3.5.3"
   },
   "scripts": {
