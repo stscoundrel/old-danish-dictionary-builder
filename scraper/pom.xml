@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.4.5</version>
+    <version>3.5.0</version>
     <relativePath /> <!-- lookup parent from repository -->
   </parent>
   <groupId>io.github.stscoundrel</groupId>
@@ -44,7 +44,7 @@
 
   <properties>
     <java.version>17</java.version>
-    <kotlin.version>2.1.20</kotlin.version>
+    <kotlin.version>2.1.21</kotlin.version>
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
   </properties>
@@ -65,7 +65,7 @@
     <dependency>
       <groupId>com.microsoft.playwright</groupId>
       <artifactId>playwright</artifactId>
-      <version>1.51.0</version>
+      <version>1.52.0</version>
     </dependency>
   </dependencies>
 
